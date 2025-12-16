@@ -3257,3 +3257,4 @@ AI: Diagnosis: Possible upper respiratory infection. Treatment: Rest, stay hydra
 
 Variables:
 - ${symptoms} - The symptoms described by the user.",FALSE,STRUCTURED,guangzhongzhang978@gmail.com
+Pitch,Write mean eye catching pitch,FALSE,TEXT,ballerfx1@gmail.com
