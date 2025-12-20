@@ -18,18 +18,23 @@
 <h2 align="center">Sponsors</h3>
 
 <div align="center">
-
-  <a href="https://clemta.com" align="center" target="_blank">
-    <img height="50" alt="Clemta logo" src="https://clemta.com/wp-content/uploads/2023/03/logo-clemta-com-1.png.webp">
-  </a>
-  <br>
-  <sub>With Clemta, you can run your company from the comfort of your home.</sub>
+  <a href="https://clemta.com/?utm_source=prompts.chat" align="center">
+    <img align="center" height="50" alt="Clemta logo" src="https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/public/sponsors/clemta.webp">
+  </a><br><br>
+  <a href="https://wind.surf/prompts-chat" align="center">
+    <img align="center" height="40" alt="Cognition logo" src="https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/public/sponsors/cognition.svg">
+  </a><br><br>
+  <a href="https://warp.dev/?utm_source=prompts.chat" align="center">
+    <img align="center" height="30" alt="Warp logo" src="https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/public/sponsors/warp.svg">
+  </a><br><br>
+  <sub>prompts.chat is built with Windsurf and Devin by Cognition</sub>
 <hr>
   <sub><a href="https://github.com/sponsors/f/sponsorships?sponsor=f&amp;tier_id=529895">Be my sponsor and your logo will be here!</a></sub>
 </div>
 
 ---
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/f/awesome-chatgpt-prompts)
 
 Welcome to the "Awesome ChatGPT Prompts" repository! While this collection was originally created for [ChatGPT](https://chat.openai.com/chat), these prompts work great with other AI models like [Claude](https://claude.ai/new), [Gemini](https://gemini.google.com), [Hugging Face Chat](https://hf.co/chat), [Llama](https://meta.ai), [Mistral](https://chat.mistral.ai), and more.
 

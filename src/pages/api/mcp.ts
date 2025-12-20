@@ -9,6 +9,30 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import { db } from "@/lib/db";
+import { isValidApiKeyFormat } from "@/lib/api-key";
+
+interface AuthenticatedUser {
+  id: string;
+  username: string;
+  mcpPromptsPublicByDefault: boolean;
+}
+
+async function authenticateApiKey(apiKey: string | null): Promise<AuthenticatedUser | null> {
+  if (!apiKey || !isValidApiKeyFormat(apiKey)) {
+    return null;
+  }
+
+  const user = await db.user.findUnique({
+    where: { apiKey },
+    select: {
+      id: true,
+      username: true,
+      mcpPromptsPublicByDefault: true,
+    },
+  });
+
+  return user;
+}
 
 interface ExtractedVariable {
   name: string;
@@ -22,6 +46,17 @@ function slugify(text: string): string {
     .replace(/[^\w\s-]/g, "")
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+/**
+ * Get the prompt name/slug for MCP.
+ * Priority: slug > slugify(title) > id
+ */
+function getPromptName(prompt: { id: string; slug?: string | null; title: string }): string {
+  if (prompt.slug) return prompt.slug;
+  const titleSlug = slugify(prompt.title);
+  if (titleSlug) return titleSlug;
+  return prompt.id;
 }
 
 function extractVariables(content: string): ExtractedVariable[] {
@@ -53,6 +88,7 @@ interface ServerOptions {
   categories?: string[];
   tags?: string[];
   users?: string[];
+  authenticatedUser?: AuthenticatedUser | null;
 }
 
 function createServer(options: ServerOptions = {}) {
@@ -64,36 +100,63 @@ function createServer(options: ServerOptions = {}) {
     {
       capabilities: {
         prompts: { listChanged: false },
+        tools: {},
       },
     }
   );
 
+  const { authenticatedUser } = options;
+
   // Build category/tag filter for prompts
-  const promptFilter: Record<string, unknown> = {
-    isPrivate: false,
-    isUnlisted: false,
-    deletedAt: null,
+  // If authenticated user is present and no specific users filter, include their private prompts
+  const buildPromptFilter = (includeOwnPrivate: boolean = true): Record<string, unknown> => {
+    const baseFilter: Record<string, unknown> = {
+      isUnlisted: false,
+      deletedAt: null,
+    };
+
+    // Handle visibility: public prompts OR authenticated user's own prompts
+    if (authenticatedUser && includeOwnPrivate) {
+      // If users filter includes the authenticated user (or no users filter), include their private prompts
+      const usersFilter = options.users && options.users.length > 0 ? options.users : null;
+      const includeAuthUserPrivate = !usersFilter || usersFilter.includes(authenticatedUser.username);
+      
+      if (includeAuthUserPrivate) {
+        baseFilter.OR = [
+          { isPrivate: false },
+          { isPrivate: true, authorId: authenticatedUser.id },
+        ];
+      } else {
+        baseFilter.isPrivate = false;
+      }
+    } else {
+      baseFilter.isPrivate = false;
+    }
+
+    if (options.categories && options.categories.length > 0) {
+      baseFilter.category = {
+        slug: { in: options.categories },
+      };
+    }
+
+    if (options.tags && options.tags.length > 0) {
+      baseFilter.tags = {
+        some: {
+          tag: { slug: { in: options.tags } },
+        },
+      };
+    }
+
+    if (options.users && options.users.length > 0) {
+      baseFilter.author = {
+        username: { in: options.users },
+      };
+    }
+
+    return baseFilter;
   };
 
-  if (options.categories && options.categories.length > 0) {
-    promptFilter.category = {
-      slug: { in: options.categories },
-    };
-  }
-
-  if (options.tags && options.tags.length > 0) {
-    promptFilter.tags = {
-      some: {
-        tag: { slug: { in: options.tags } },
-      },
-    };
-  }
-
-  if (options.users && options.users.length > 0) {
-    promptFilter.author = {
-      username: { in: options.users },
-    };
-  }
+  const promptFilter = buildPromptFilter();
 
   // Dynamic MCP Prompts - expose database prompts as MCP prompts
   server.server.setRequestHandler(ListPromptsRequestSchema, async (request) => {
@@ -108,6 +171,7 @@ function createServer(options: ServerOptions = {}) {
       orderBy: { createdAt: "desc" },
       select: {
         id: true,
+        slug: true,
         title: true,
         description: true,
         content: true,
@@ -121,7 +185,7 @@ function createServer(options: ServerOptions = {}) {
       prompts: results.map((p) => {
         const variables = extractVariables(p.content);
         return {
-          name: slugify(p.title),
+          name: getPromptName(p),
           title: p.title,
           description: p.description || undefined,
           arguments: variables.map((v) => ({
@@ -143,13 +207,20 @@ function createServer(options: ServerOptions = {}) {
     const prompts = await db.prompt.findMany({
       where: promptFilter,
       select: {
+        id: true,
+        slug: true,
         title: true,
         description: true,
         content: true,
       },
     });
 
-    const prompt = prompts.find((p) => slugify(p.title) === promptSlug);
+    // Find by slug field first, then by slugified title, then by id
+    const prompt = prompts.find((p) => 
+      p.slug === promptSlug || 
+      slugify(p.title) === promptSlug || 
+      p.id === promptSlug
+    );
 
     if (!prompt) {
       throw new Error(`Prompt not found: ${promptSlug}`);
@@ -206,13 +277,26 @@ function createServer(options: ServerOptions = {}) {
     async ({ query, limit = 10, type, category, tag }) => {
       try {
         const where: Record<string, unknown> = {
-          isPrivate: false,
           isUnlisted: false,
           deletedAt: null,
-          OR: [
-            { title: { contains: query, mode: "insensitive" } },
-            { description: { contains: query, mode: "insensitive" } },
-            { content: { contains: query, mode: "insensitive" } },
+          AND: [
+            // Search filter
+            {
+              OR: [
+                { title: { contains: query, mode: "insensitive" } },
+                { description: { contains: query, mode: "insensitive" } },
+                { content: { contains: query, mode: "insensitive" } },
+              ],
+            },
+            // Visibility filter: public OR user's own private prompts
+            authenticatedUser
+              ? {
+                  OR: [
+                    { isPrivate: false },
+                    { isPrivate: true, authorId: authenticatedUser.id },
+                  ],
+                }
+              : { isPrivate: false },
           ],
         };
 
@@ -226,6 +310,7 @@ function createServer(options: ServerOptions = {}) {
           orderBy: { createdAt: "desc" },
           select: {
             id: true,
+            slug: true,
             title: true,
             description: true,
             content: true,
@@ -241,6 +326,7 @@ function createServer(options: ServerOptions = {}) {
 
         const results = prompts.map((p) => ({
           id: p.id,
+          slug: getPromptName(p),
           title: p.title,
           description: p.description,
           content: p.content,
@@ -292,6 +378,7 @@ function createServer(options: ServerOptions = {}) {
           },
           select: {
             id: true,
+            slug: true,
             title: true,
             description: true,
             content: true,
@@ -329,7 +416,9 @@ function createServer(options: ServerOptions = {}) {
           }
 
           try {
-            const result = await extra.sendRequest(
+            // Add timeout to prevent hanging if client doesn't support elicitation
+            const timeoutMs = 10000; // 10 seconds
+            const elicitationPromise = extra.sendRequest(
               {
                 method: "elicitation/create",
                 params: {
@@ -344,6 +433,12 @@ function createServer(options: ServerOptions = {}) {
               },
               ElicitResultSchema
             );
+            
+            const timeoutPromise = new Promise<never>((_, reject) => 
+              setTimeout(() => reject(new Error("Elicitation timeout")), timeoutMs)
+            );
+            
+            const result = await Promise.race([elicitationPromise, timeoutPromise]);
 
             if (result.action === "accept" && result.content) {
               let filledContent = prompt.content;
@@ -368,6 +463,7 @@ function createServer(options: ServerOptions = {}) {
                         author: prompt.author.name || prompt.author.username,
                         category: prompt.category?.name || null,
                         tags: prompt.tags.map((t) => t.tag.name),
+                        link: `https://prompts.chat/prompts/${prompt.id}_${getPromptName(prompt)}`,
                       },
                       null,
                       2
@@ -388,6 +484,7 @@ function createServer(options: ServerOptions = {}) {
                         author: prompt.author.name || prompt.author.username,
                         category: prompt.category?.name || null,
                         tags: prompt.tags.map((t) => t.tag.name),
+                        link: `https://prompts.chat/prompts/${prompt.id}_${getPromptName(prompt)}`,
                       },
                       null,
                       2
@@ -409,6 +506,7 @@ function createServer(options: ServerOptions = {}) {
                       author: prompt.author.name || prompt.author.username,
                       category: prompt.category?.name || null,
                       tags: prompt.tags.map((t) => t.tag.name),
+                      link: `https://prompts.chat/prompts/${prompt.id}_${getPromptName(prompt)}`,
                     },
                     null,
                     2
@@ -429,6 +527,7 @@ function createServer(options: ServerOptions = {}) {
                   author: prompt.author.name || prompt.author.username,
                   category: prompt.category?.name || null,
                   tags: prompt.tags.map((t) => t.tag.name),
+                  link: `https://prompts.chat/prompts/${prompt.id}_${getPromptName(prompt)}`,
                 },
                 null,
                 2
@@ -440,6 +539,123 @@ function createServer(options: ServerOptions = {}) {
         console.error("MCP get_prompt error:", error);
         return {
           content: [{ type: "text" as const, text: JSON.stringify({ error: "Failed to get prompt" }) }],
+          isError: true,
+        };
+      }
+    }
+  );
+
+  // Save prompt tool - requires authentication
+  server.registerTool(
+    "save_prompt",
+    {
+      title: "Save Prompt",
+      description:
+        "Save a new prompt to your prompts.chat account. Requires API key authentication. Prompts are private by default unless configured otherwise in settings.",
+      inputSchema: {
+        title: z.string().min(1).max(200).describe("Title of the prompt"),
+        content: z.string().min(1).describe("The prompt content. Can include variables like ${variable} or ${variable:default}"),
+        description: z.string().max(500).optional().describe("Optional description of the prompt"),
+        tags: z.array(z.string()).max(10).optional().describe("Optional array of tag names (will be created if they don't exist)"),
+        category: z.string().optional().describe("Optional category slug"),
+        isPrivate: z.boolean().optional().describe("Whether the prompt is private (default: uses your account setting)"),
+        type: z.enum(["TEXT", "STRUCTURED", "IMAGE", "VIDEO", "AUDIO"]).optional().describe("Prompt type (default: TEXT)"),
+        structuredFormat: z.enum(["JSON", "YAML"]).optional().describe("Format for structured prompts"),
+      },
+    },
+    async ({ title, content, description, tags, category, isPrivate, type, structuredFormat }) => {
+      if (!authenticatedUser) {
+        return {
+          content: [{ type: "text" as const, text: JSON.stringify({ error: "Authentication required. Please provide an API key." }) }],
+          isError: true,
+        };
+      }
+
+      try {
+        // Determine privacy setting
+        const shouldBePrivate = isPrivate !== undefined ? isPrivate : !authenticatedUser.mcpPromptsPublicByDefault;
+
+        // Find or create tags
+        const tagConnections: { tag: { connect: { id: string } } }[] = [];
+        if (tags && tags.length > 0) {
+          for (const tagName of tags) {
+            const tagSlug = slugify(tagName);
+            if (!tagSlug) continue;
+            
+            let tag = await db.tag.findUnique({ where: { slug: tagSlug } });
+            if (!tag) {
+              tag = await db.tag.create({
+                data: {
+                  name: tagName,
+                  slug: tagSlug,
+                },
+              });
+            }
+            tagConnections.push({ tag: { connect: { id: tag.id } } });
+          }
+        }
+
+        // Find category if provided
+        let categoryId: string | undefined;
+        if (category) {
+          const cat = await db.category.findUnique({ where: { slug: category } });
+          if (cat) categoryId = cat.id;
+        }
+
+        // Create the prompt
+        const prompt = await db.prompt.create({
+          data: {
+            title,
+            slug: slugify(title),
+            content,
+            description: description || null,
+            isPrivate: shouldBePrivate,
+            type: type || "TEXT",
+            structuredFormat: type === "STRUCTURED" ? (structuredFormat || "JSON") : null,
+            authorId: authenticatedUser.id,
+            categoryId: categoryId || null,
+            tags: {
+              create: tagConnections,
+            },
+          },
+          select: {
+            id: true,
+            slug: true,
+            title: true,
+            description: true,
+            content: true,
+            isPrivate: true,
+            type: true,
+            createdAt: true,
+            tags: { select: { tag: { select: { name: true, slug: true } } } },
+            category: { select: { name: true, slug: true } },
+          },
+        });
+
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: JSON.stringify(
+                {
+                  success: true,
+                  prompt: {
+                    ...prompt,
+                    tags: prompt.tags.map((t) => t.tag.name),
+                    category: prompt.category?.name || null,
+                    link: prompt.isPrivate ? null : `https://prompts.chat/prompts/${prompt.id}_${getPromptName(prompt)}`,
+                  },
+                },
+                null,
+                2
+              ),
+            },
+          ],
+        };
+      } catch (error) {
+        console.error("MCP save_prompt error:", error);
+        return {
+          content: [{ type: "text" as const, text: JSON.stringify({ error: "Failed to save prompt" }) }],
           isError: true,
         };
       }
@@ -484,6 +700,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           name: "get_prompt",
           description: "Get a prompt by ID with variable elicitation support.",
         },
+        {
+          name: "save_prompt",
+          description: "Save a new prompt (requires API key authentication).",
+        },
       ],
       prompts: {
         description: "All public prompts are available as MCP prompts. Use prompts/list to browse and prompts/get to retrieve with variable substitution.",
@@ -511,7 +731,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const tagsParam = url.searchParams.get("tags");
   const usersParam = url.searchParams.get("users");
 
-  const serverOptions: ServerOptions = {};
+  // Extract API key from PROMPTS_API_KEY header or query parameter
+  const apiKeyHeader = req.headers["prompts_api_key"] || req.headers["prompts-api-key"];
+  const apiKeyParam = url.searchParams.get("api_key");
+  const apiKey = (Array.isArray(apiKeyHeader) ? apiKeyHeader[0] : apiKeyHeader) || apiKeyParam;
+
+  // Authenticate user if API key is provided
+  const authenticatedUser = await authenticateApiKey(apiKey);
+
+  const serverOptions: ServerOptions = { authenticatedUser };
   if (categoriesParam) {
     serverOptions.categories = categoriesParam.split(",").map((c) => c.trim());
   }

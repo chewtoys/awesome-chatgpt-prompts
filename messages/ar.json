@@ -46,6 +46,31 @@
     "register": "إنشاء حساب",
     "logout": "تسجيل الخروج"
   },
+  "brand": {
+    "copyLogoSvg": "نسخ شعار SVG",
+    "brandAssets": "موارد العلامة التجارية",
+    "title": "موارد العلامة التجارية",
+    "description": "الشعارات الرسمية والألوان وإرشادات العلامة التجارية لـ {name}. مجاني للصحافة والشراكات ومشاريع المجتمع.",
+    "logos": "الشعارات",
+    "logo": "الشعار",
+    "logoWithName": "الشعار مع الاسم",
+    "forLightBackgrounds": "للخلفيات الفاتحة",
+    "forDarkBackgrounds": "للخلفيات الداكنة",
+    "brandColors": "ألوان العلامة التجارية",
+    "clickToCopy": "انقر لنسخ قيمة hex",
+    "primary": "لون العلامة التجارية الأساسي",
+    "background": "خلفية فاتحة",
+    "accent": "لون التمييز النيلي",
+    "muted": "لون النص المكتوم",
+    "usageGuidelines": "إرشادات الاستخدام",
+    "guideline1": "لا تمدد أو تشوه أو تدور الشعار",
+    "guideline2": "حافظ على مسافة كافية حول الشعار",
+    "guideline3": "استخدم الشعار الداكن على الخلفيات الفاتحة والعكس",
+    "guideline4": "لا تضف تأثيرات مثل الظلال أو التدرجات للشعار",
+    "guideline5": "يجب أن يكون الشعار مرئيًا بوضوح على الخلفية",
+    "license": "الترخيص",
+    "licenseText": "يتم توفير موارد العلامة التجارية {name} بموجب <link>CC0 1.0 Universal</link>. أنت حر في استخدام هذه الموارد لأي غرض دون إسناد."
+  },
   "auth": {
     "login": "تسجيل الدخول",
     "loginDescription": "أدخل بياناتك للمتابعة",
@@ -76,6 +101,7 @@
   "prompts": {
     "title": "الأوامر",
     "create": "إنشاء أمر",
+    "createInfo": "هذه المنصة لا تقوم بتشغيل أو تنفيذ الأوامر — إنها مكتبة مجتمعية لمشاركة واكتشاف أوامر الذكاء الاصطناعي. أنشئ أمرك هنا، ويمكن للآخرين نسخه واستخدامه في أدوات الذكاء الاصطناعي المفضلة لديهم مثل ChatGPT و Claude و Gemini أو أي نموذج لغوي آخر. يمكن للمجتمع أيضاً التعليق على أوامرك واقتراح تحسينات من خلال طلبات التغيير.",
     "hfDataStudio": {
       "button": "استوديو بيانات HF",
       "sqlQuery": "استعلام SQL",
@@ -94,7 +120,8 @@
     "privatePrompts": "الأوامر الخاصة",
     "noPrompts": "لم يتم العثور على أوامر",
     "noPromptsDescription": "حاول تعديل معايير البحث أو التصفية للعثور على ما تبحث عنه.",
-    "noMorePrompts": "وصلت إلى النهاية",
+    "noMorePrompts": "لقد وصلت إلى النهاية",
+    "loadMore": "تحميل المزيد",
     "loading": "جاري التحميل...",
     "promptTitle": "العنوان",
     "promptContent": "المحتوى",
@@ -115,6 +142,18 @@
     "unlist": "إلغاء الإدراج",
     "relist": "إعادة الإدراج",
     "adminArea": "منطقة المسؤول",
+    "promptDelisted": "تم إزالة هذا البرومبت من القائمة",
+    "delistReasonTooShort": "تم إزالة هذا البرومبت تلقائياً لأن المحتوى قصير جداً. سيظل يظهر في ملفك الشخصي، لكنه لن يُصدَّر إلى GitHub ولن يظهر في نتائج البحث.",
+    "delistReasonNotEnglish": "تم إزالة هذا البرومبت تلقائياً لأنه ليس باللغة الإنجليزية بشكل أساسي. سيظل يظهر في ملفك الشخصي، لكنه لن يُصدَّر إلى GitHub ولن يظهر في نتائج البحث.",
+    "delistReasonLowQuality": "تم إزالة هذا البرومبت تلقائياً بسبب مشاكل في الجودة. سيظل يظهر في ملفك الشخصي، لكنه لن يُصدَّر إلى GitHub ولن يظهر في نتائج البحث.",
+    "delistReasonNotInstruction": "تم إزالة هذا البرومبت تلقائياً لأنه لا يبدو كتعليمات لنموذج لغوي. سيظل يظهر في ملفك الشخصي، لكنه لن يُصدَّر إلى GitHub ولن يظهر في نتائج البحث.",
+    "delistReasonManual": "تم إزالة هذا البرومبت يدوياً بواسطة المسؤول. سيظل يظهر في ملفك الشخصي، لكنه لن يُصدَّر إلى GitHub ولن يظهر في نتائج البحث.",
+    "delistReasonUnknown": "تم إزالة هذا البرومبت من القائمة. سيظل يظهر في ملفك الشخصي، لكنه لن يُصدَّر إلى GitHub ولن يظهر في نتائج البحث.",
+    "delistOwnerNote": "بما أن هذا البرومبت تم إزالته بسبب مشاكل في الجودة، يمكنك حذفه إذا أردت.",
+    "deletePrompt": "حذف البرومبت",
+    "deletePromptTitle": "حذف هذا البرومبت؟",
+    "deletePromptDescription": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف البرومبت نهائياً.",
+    "deleteError": "فشل في حذف البرومبت",
     "types": {
       "text": "نص",
       "image": "صورة",
@@ -125,8 +164,9 @@
     },
     "inputType": "أمر المستخدم",
     "outputType": "استجابة الذكاء الاصطناعي",
+    "afterAiProcessing": "بعد معالجة الذكاء الاصطناعي...",
     "inputTypeDescription": "كيف يتم تنسيق الأمر الخاص بك",
-    "outputTypeDescription": "نوع الاستجابة التي سيولدها الذكاء الاصطناعي",
+    "outputTypeDescription": "أظهر للمجتمع كيف يعمل هذا الأمر عند تشغيله على أدوات الذكاء الاصطناعي. يمكنك إنشاء المخرجات بنفسك باستخدام تطبيق الذكاء الاصطناعي المفضل لديك.",
     "outputTypeStructuredNote": "الأوامر المنظمة يمكن أن تنتج أنواع مختلفة من المخرجات",
     "inputTypes": {
       "text": "أمر نصي",
@@ -185,7 +225,18 @@
     "confirmDelete": "هل أنت متأكد من حذف هذا الأمر؟",
     "promptCreated": "تم إنشاء الأمر",
     "promptUpdated": "تم تحديث الأمر",
+    "rateLimitError": "يرجى الانتظار 30 ثانية قبل إنشاء أمر آخر",
+    "duplicatePromptError": "لديك بالفعل أمر بنفس العنوان أو المحتوى",
+    "contentExistsError": "يوجد أمر بهذا المحتوى بالفعل: \"{title}\" بواسطة {author}",
     "run": "تشغيل",
+    "downloadMarkdown": "تحميل MD",
+    "downloadYaml": "تحميل YAML",
+    "copyMarkdownUrl": "نسخ رابط MD",
+    "copyYamlUrl": "نسخ رابط YAML",
+    "downloadStarted": "بدأ التحميل",
+    "downloadFailed": "فشل التحميل",
+    "urlCopied": "تم نسخ الرابط",
+    "failedToCopyUrl": "فشل نسخ الرابط",
     "promptCopied": "تم نسخ الأمر",
     "promptCopiedDescription": "تم نسخ الأمر إلى الحافظة. الصقه في {platform} بعد فتحه.",
     "openPlatform": "فتح {platform}",
@@ -226,7 +277,12 @@
     "supportedFormat": "الصيغة المدعومة",
     "or": "أو",
     "detectedVariables": "المتغيرات",
-    "clickToEdit": "انقر للتعديل"
+    "clickToEdit": "انقر للتعديل",
+    "translateToLanguage": "ترجم إلى لغتك",
+    "translated": "تمت ترجمة المحتوى",
+    "translationFailed": "فشلت الترجمة",
+    "alreadyTranslated": "تمت الترجمة بالفعل",
+    "learnHowToWritePrompts": "تعلم كيفية كتابة أوامر فعالة ←"
   },
   "changeRequests": {
     "title": "طلبات التغيير",
@@ -376,7 +432,35 @@
       "generateEmbeddings": "إنشاء التضمينات",
       "regenerateEmbeddings": "إعادة إنشاء جميع التضمينات",
       "embeddingsSuccess": "تم إنشاء {count} تضمين",
-      "embeddingsResult": "نجاح: {success}, فشل: {failed}"
+      "embeddingsResult": "نجاح: {success}, فشل: {failed}",
+      "slugsTitle": "روابط URL",
+      "generateSlugs": "إنشاء الروابط",
+      "regenerateSlugs": "إعادة إنشاء جميع الروابط (ترجمة العناوين إلى الإنجليزية)",
+      "slugsSuccess": "تم إنشاء {count} رابط",
+      "slugsResult": "نجاح: {success}, فشل: {failed}"
+    },
+    "promptsList": {
+      "title": "جميع المطالبات",
+      "description": "تصفح وإدارة جميع المطالبات في النظام",
+      "noPrompts": "لم يتم العثور على مطالبات",
+      "private": "خاص",
+      "unlisted": "غير مدرج",
+      "views": "مشاهدات",
+      "votes": "أصوات",
+      "created": "تاريخ الإنشاء",
+      "showing": "عرض {from}-{to} من {total}",
+      "deleteConfirmTitle": "حذف المطالبة؟",
+      "deleteConfirmDescription": "هل أنت متأكد من حذف \"{title}\" نهائياً؟ لا يمكن التراجع عن هذا الإجراء وستتم إزالة جميع البيانات المرتبطة.",
+      "deleted": "تم حذف المطالبة بنجاح",
+      "filters": {
+        "all": "الكل",
+        "public": "عام",
+        "private": "خاص",
+        "unlisted": "غير مدرج",
+        "featured": "مميز",
+        "reported": "مُبلغ عنه",
+        "deleted": "محذوف"
+      }
     },
     "users": {
       "title": "إدارة المستخدمين",
@@ -400,7 +484,17 @@
       "unverified": "تم إلغاء توثيق المستخدم",
       "verifyFailed": "فشل تحديث التوثيق",
       "deleteConfirmTitle": "حذف المستخدم؟",
-      "deleteConfirmDescription": "هذا الإجراء لا يمكن التراجع عنه. سيتم حذف جميع بيانات المستخدم نهائياً."
+      "deleteConfirmDescription": "هذا الإجراء لا يمكن التراجع عنه. سيتم حذف جميع بيانات المستخدم نهائياً.",
+      "searchPlaceholder": "البحث عن مستخدمين...",
+      "noUsers": "لم يتم العثور على مستخدمين",
+      "showing": "عرض {from}-{to} من {total}",
+      "filters": {
+        "all": "الكل",
+        "admin": "المديرون",
+        "user": "المستخدمون",
+        "verified": "موثق",
+        "unverified": "غير موثق"
+      }
     },
     "categories": {
       "title": "إدارة التصنيفات",
@@ -559,7 +653,8 @@
     "contributionsCount": "مساهمات",
     "noContributions": "لا توجد مساهمات بعد",
     "noContributionsOwner": "لم تساهم في أي أوامر بعد",
-    "contributedTo": "ساهم في أمر {author}"
+    "contributedTo": "ساهم في أمر {author}",
+    "privatePromptsNote": "لديك {count} {count, plural, one {أمر خاص} other {أوامر خاصة}}. يمكنك الوصول إليها عبر MCP باستخدام مفتاح API الخاص بك في العملاء المدعومين."
   },
   "subscription": {
     "subscribe": "اشتراك",
@@ -640,11 +735,15 @@
     "latestPrompts": "أحدث الأوامر",
     "achievements": {
       "featuredIn": "ظهر في",
+      "referencedBy": "مرجع في",
       "forbes": "Forbes",
+      "harvardUniversity": "جامعة هارفارد",
       "mostLikedDataset": "#1 مجموعة البيانات الأكثر إعجاباً على Hugging Face",
       "githubStars": "نجوم GitHub",
       "mostStarredRepo": "#33 المستودع الأكثر نجومية في العالم",
       "usedByThousands": "يستخدمه الآلاف يومياً",
+      "githubStaffPick": "اختيار فريق GitHub",
+      "fullyOpenSource": "مكتبة الأوامر الوحيدة المجانية والمفتوحة المصدر 100%",
       "sponsoredBy": "برعاية",
       "becomeSponsor": "كن راعياً"
     }
@@ -652,7 +751,36 @@
   "notifications": {
     "title": "الإشعارات",
     "pendingChangeRequests": "طلبات التغيير المعلقة",
-    "noNotifications": "لا توجد إشعارات"
+    "noNotifications": "لا توجد إشعارات",
+    "markAllRead": "تعليم الكل كمقروء",
+    "commentedOnPrompt": "علق على أمرك",
+    "repliedToComment": "رد على تعليقك"
+  },
+  "comments": {
+    "comments": "التعليقات",
+    "writeComment": "اكتب تعليقاً...",
+    "postComment": "نشر التعليق",
+    "reply": "رد",
+    "replyTo": "الرد على @{username}...",
+    "posting": "جاري النشر...",
+    "commentPosted": "تم نشر التعليق",
+    "commentDeleted": "تم حذف التعليق",
+    "commentFlagged": "تم الإبلاغ عن التعليق",
+    "commentUnflagged": "تم إلغاء الإبلاغ",
+    "noComments": "لا توجد تعليقات بعد. كن أول من يعلق!",
+    "loginToComment": "يرجى تسجيل الدخول للتعليق.",
+    "loginToVote": "يرجى تسجيل الدخول للتصويت.",
+    "upvote": "تصويت إيجابي",
+    "downvote": "تصويت سلبي",
+    "flag": "إبلاغ",
+    "unflag": "إلغاء الإبلاغ",
+    "flagged": "تم الإبلاغ",
+    "admin": "مشرف",
+    "deleteCommentTitle": "حذف التعليق؟",
+    "deleteCommentDescription": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف التعليق وجميع الردود نهائياً.",
+    "deleting": "جاري الحذف...",
+    "showReplies": "عرض {count} ردود",
+    "hideReplies": "إخفاء الردود"
   },
   "promptmasters": {
     "title": "Promptmasters",
@@ -756,6 +884,112 @@
     "categories": "الفئات",
     "categoryPlaceholder": "إضافة رمز الفئة...",
     "tags": "العلامات",
-    "tagPlaceholder": "إضافة رمز العلامة..."
+    "tagPlaceholder": "إضافة رمز العلامة...",
+    "generateApiKey": "أنشئ مفتاح API لحفظ الأوامر عبر MCP"
+  },
+  "footer": {
+    "howTo": "كيفية...",
+    "docs": "المستندات",
+    "api": "API",
+    "privacy": "الخصوصية",
+    "terms": "الشروط"
+  },
+  "apiKey": {
+    "title": "مفتاح API لـ MCP",
+    "description": "أنشئ مفتاح API لحفظ الأوامر عبر MCP والوصول إلى أوامرك الخاصة.",
+    "yourApiKey": "مفتاح API الخاص بك",
+    "keyWarning": "احتفظ بهذا المفتاح سرياً. يمكن لأي شخص لديه هذا المفتاح الوصول إلى أوامرك الخاصة وإنشاء أوامر نيابة عنك.",
+    "noApiKey": "لم تقم بإنشاء مفتاح API بعد.",
+    "generate": "إنشاء مفتاح API",
+    "regenerate": "إعادة الإنشاء",
+    "revoke": "إلغاء",
+    "regenerateTitle": "إعادة إنشاء مفتاح API؟",
+    "regenerateDescription": "سيؤدي هذا إلى إبطال مفتاح API الحالي. ستحتاج عملاء MCP الذين يستخدمون المفتاح القديم إلى التحديث.",
+    "revokeTitle": "إلغاء مفتاح API؟",
+    "revokeDescription": "سيؤدي هذا إلى حذف مفتاح API الخاص بك نهائياً. لن تتمكن من استخدام ميزات MCP التي تتطلب المصادقة حتى تنشئ مفتاحاً جديداً.",
+    "keyGenerated": "تم إنشاء مفتاح API بنجاح",
+    "keyRegenerated": "تم إعادة إنشاء مفتاح API بنجاح",
+    "keyRevoked": "تم إلغاء مفتاح API",
+    "publicByDefault": "أوامر عامة افتراضياً",
+    "publicByDefaultDescription": "عند حفظ الأوامر عبر MCP، اجعلها عامة افتراضياً بدلاً من خاصة.",
+    "settingUpdated": "تم تحديث الإعداد"
+  },
+  "promptWritingGuide": {
+    "title": "كيفية كتابة أوامر رائعة",
+    "subtitle": "نصائح وأمثلة وأفضل الممارسات لإنشاء أوامر ذكاء اصطناعي فعالة",
+    "generalTips": {
+      "title": "نصائح عامة للأوامر الفعالة",
+      "beSpecific": {
+        "title": "كن محدداً وواضحاً",
+        "description": "الأوامر الغامضة تؤدي إلى استجابات غامضة. حدد بالضبط ما تريده، بما في ذلك التنسيق والطول والنبرة وأي قيود."
+      },
+      "provideContext": {
+        "title": "قدم السياق",
+        "description": "أعطِ معلومات خلفية تساعد الذكاء الاصطناعي على فهم احتياجاتك. تضمن من، ماذا، لماذا، ولمن."
+      },
+      "defineFormat": {
+        "title": "حدد تنسيق المخرجات",
+        "description": "حدد كيف تريد هيكلة الاستجابة: نقاط، فقرات، كتل برمجية، جداول، إلخ."
+      },
+      "setConstraints": {
+        "title": "ضع القيود",
+        "description": "تضمن قيوداً مثل عدد الكلمات، مستوى القراءة، الأشياء التي يجب تجنبها، أو متطلبات محددة يجب اتباعها."
+      },
+      "includeExamples": {
+        "title": "أضف أمثلة",
+        "description": "أظهر للذكاء الاصطناعي كيف يبدو المخرج الجيد. الأمثلة تساعد في معايرة نمط وجودة الاستجابة."
+      }
+    },
+    "rolePlaying": {
+      "title": "لعب الأدوار: أنماط \"تصرف كـ\"",
+      "description": "إحدى أقوى تقنيات الأوامر هي تعيين دور أو شخصية محددة للذكاء الاصطناعي. هذا يساعد في تأسيس الخبرة والنبرة والمنظور.",
+      "basicPattern": "نمط الدور الأساسي",
+      "exampleExpert": "مثال: خبير تقني",
+      "exampleCreative": "مثال: مدرب إبداعي",
+      "popularRoles": "فئات الأدوار الشائعة"
+    },
+    "variables": {
+      "title": "استخدام المتغيرات للأوامر الديناميكية",
+      "description": "المتغيرات تجعل أوامرك قابلة لإعادة الاستخدام والتخصيص. يمكن للمستخدمين إدخال قيم مختلفة في كل مرة يستخدمون فيها أمرك.",
+      "syntax": "صيغة المتغيرات",
+      "requiredVar": "متغير مطلوب (يجب على المستخدم ملؤه)",
+      "withDefault": "متغير بقيمة افتراضية",
+      "simpleExample": "مثال بسيط",
+      "advancedExample": "مثال متقدم مع متغيرات متعددة",
+      "bestPractices": "أفضل الممارسات",
+      "tip1": "استخدم أسماء متغيرات وصفية: '$'{topic} أفضل من '$'{x}",
+      "tip2": "قدم قيم افتراضية معقولة للقيم الاختيارية",
+      "tip3": "جمّع المتغيرات المرتبطة معاً في أمرك",
+      "tip4": "استخدم الشرطات السفلية للأسماء متعددة الكلمات: '$'{target_audience}"
+    },
+    "structured": {
+      "title": "الأوامر المهيكلة (JSON/YAML)",
+      "description": "الأوامر المهيكلة تستخدم تنسيق JSON أو YAML لتنظيم التعليمات المعقدة بوضوح. مثالية لسير العمل متعدد الخطوات والوكلاء والتكوينات التفصيلية.",
+      "whenToUse": "متى تستخدم الأوامر المهيكلة",
+      "useCase1": "سير عمل أو خطوط أنابيب معقدة متعددة الخطوات",
+      "useCase2": "تكوينات الوكلاء مع معلمات متعددة",
+      "useCase3": "أوامر ذات إعدادات مترابطة كثيرة",
+      "useCase4": "استخدام الأوامر المدفوع بـ API أو البرمجي",
+      "jsonExample": "مثال JSON: مساعد المقابلات",
+      "yamlExample": "مثال YAML: مولد المحتوى",
+      "agentWorkflow": "مثال JSON: سير عمل الوكيل",
+      "tips": "نصائح للأوامر المهيكلة",
+      "tip1": "استخدم JSON للاستخدام البرمجي؛ YAML للتكوينات القابلة للقراءة",
+      "tip2": "حافظ على التداخل ضحلاً (2-3 مستويات كحد أقصى) للقراءة",
+      "tip3": "أضف تعليقات في YAML لشرح الأقسام المعقدة",
+      "tip4": "تحقق من صحة صيغة JSON/YAML قبل الحفظ"
+    },
+    "outputOptimization": {
+      "title": "تحسين المخرجات",
+      "description": "وجّه الذكاء الاصطناعي لإنتاج التنسيق والأسلوب الذي تحتاجه بالضبط من خلال كونك صريحًا بشأن متطلباتك.",
+      "formatInstructions": "قالب تعليمات التنسيق",
+      "constraintExamples": "أنواع القيود الشائعة",
+      "lengthConstraints": "قيود الطول:",
+      "lengthExample": "\"اجعل الرد أقل من 200 كلمة\" / \"قدم 5 نقاط بالضبط\"",
+      "styleConstraints": "قيود الأسلوب:",
+      "styleExample": "\"استخدم لغة بسيطة مناسبة للمبتدئين\" / \"كن تقنيًا ودقيقًا\"",
+      "contentConstraints": "قيود المحتوى:",
+      "contentExample": "\"لا تضمن آراء شخصية\" / \"ركز فقط على المعلومات الواقعية\""
+    }
   }
 }

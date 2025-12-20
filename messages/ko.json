@@ -46,6 +46,31 @@
     "register": "회원가입",
     "logout": "로그아웃"
   },
+  "brand": {
+    "copyLogoSvg": "로고 SVG 복사",
+    "brandAssets": "브랜드 자산",
+    "title": "브랜드 자산",
+    "description": "{name}의 공식 로고, 색상 및 브랜드 가이드라인입니다. 언론, 파트너십 및 커뮤니티 프로젝트에 무료로 사용할 수 있습니다.",
+    "logos": "로고",
+    "logo": "로고",
+    "logoWithName": "이름이 있는 로고",
+    "forLightBackgrounds": "밝은 배경용",
+    "forDarkBackgrounds": "어두운 배경용",
+    "brandColors": "브랜드 색상",
+    "clickToCopy": "클릭하여 hex 값 복사",
+    "primary": "기본 브랜드 색상",
+    "background": "밝은 배경",
+    "accent": "인디고 강조 색상",
+    "muted": "음소거 텍스트 색상",
+    "usageGuidelines": "사용 지침",
+    "guideline1": "로고를 늘리거나 왜곡하거나 회전하지 마세요",
+    "guideline2": "로고 주위에 적절한 간격을 유지하세요",
+    "guideline3": "밝은 배경에는 어두운 로고를, 어두운 배경에는 밝은 로고를 사용하세요",
+    "guideline4": "로고에 그림자나 그라데이션 같은 효과를 추가하지 마세요",
+    "guideline5": "로고는 배경에 대해 명확하게 보여야 합니다",
+    "license": "라이선스",
+    "licenseText": "{name} 브랜드 자산은 <link>CC0 1.0 Universal</link> 하에 제공됩니다. 귀속 표시 없이 어떤 목적으로든 이러한 자산을 자유롭게 사용할 수 있습니다."
+  },
   "auth": {
     "login": "로그인",
     "loginDescription": "계속하려면 자격 증명을 입력하세요",
@@ -76,6 +101,7 @@
   "prompts": {
     "title": "프롬프트",
     "create": "프롬프트 생성",
+    "createInfo": "이 플랫폼은 프롬프트를 실행하지 않습니다 — AI 프롬프트를 공유하고 발견하는 커뮤니티 라이브러리입니다. 여기서 프롬프트를 만들면 다른 사용자들이 ChatGPT, Claude, Gemini 등 선호하는 AI 도구에서 복사하여 사용할 수 있습니다. 커뮤니티는 프롬프트에 댓글을 달고 변경 요청을 통해 개선 사항을 제안할 수도 있습니다.",
     "hfDataStudio": {
       "button": "HF 데이터 스튜디오",
       "sqlQuery": "SQL 쿼리",
@@ -94,7 +120,8 @@
     "privatePrompts": "비공개 프롬프트",
     "noPrompts": "프롬프트가 없습니다",
     "noPromptsDescription": "원하는 것을 찾으려면 검색 또는 필터 조건을 조정해 보세요.",
-    "noMorePrompts": "마지막까지 확인했습니다",
+    "noMorePrompts": "끝에 도달했습니다",
+    "loadMore": "더 보기",
     "loading": "로딩 중...",
     "promptTitle": "제목",
     "promptContent": "내용",
@@ -115,6 +142,18 @@
     "unlist": "숨기기",
     "relist": "다시 표시",
     "adminArea": "관리자 영역",
+    "promptDelisted": "이 프롬프트가 목록에서 제거되었습니다",
+    "delistReasonTooShort": "이 프롬프트는 내용이 너무 짧아 자동으로 목록에서 제거되었습니다. 프로필에는 계속 표시되지만 GitHub로 내보내지거나 검색에 표시되지 않습니다.",
+    "delistReasonNotEnglish": "이 프롬프트는 주로 영어가 아니어서 자동으로 목록에서 제거되었습니다. 프로필에는 계속 표시되지만 GitHub로 내보내지거나 검색에 표시되지 않습니다.",
+    "delistReasonLowQuality": "이 프롬프트는 품질 문제로 자동으로 목록에서 제거되었습니다. 프로필에는 계속 표시되지만 GitHub로 내보내지거나 검색에 표시되지 않습니다.",
+    "delistReasonNotInstruction": "이 프롬프트는 LLM 지시사항이 아닌 것으로 보여 자동으로 목록에서 제거되었습니다. 프로필에는 계속 표시되지만 GitHub로 내보내지거나 검색에 표시되지 않습니다.",
+    "delistReasonManual": "이 프롬프트는 관리자에 의해 수동으로 목록에서 제거되었습니다. 프로필에는 계속 표시되지만 GitHub로 내보내지거나 검색에 표시되지 않습니다.",
+    "delistReasonUnknown": "이 프롬프트가 목록에서 제거되었습니다. 프로필에는 계속 표시되지만 GitHub로 내보내지거나 검색에 표시되지 않습니다.",
+    "delistOwnerNote": "이 프롬프트가 품질 문제로 목록에서 제거되었으므로 원하시면 삭제할 수 있습니다.",
+    "deletePrompt": "프롬프트 삭제",
+    "deletePromptTitle": "이 프롬프트를 삭제하시겠습니까?",
+    "deletePromptDescription": "이 작업은 취소할 수 없습니다. 프롬프트가 영구적으로 삭제됩니다.",
+    "deleteError": "프롬프트 삭제 실패",
     "types": {
       "text": "텍스트",
       "image": "이미지",
@@ -125,8 +164,9 @@
     },
     "inputType": "사용자 프롬프트",
     "outputType": "AI 응답",
+    "afterAiProcessing": "AI 처리 후...",
     "inputTypeDescription": "프롬프트 형식",
-    "outputTypeDescription": "AI가 생성할 응답 유형",
+    "outputTypeDescription": "이 프롬프트가 AI 도구에서 실행될 때 어떻게 작동하는지 커뮤니티에 보여주세요. 좋아하는 AI 앱을 사용하여 직접 출력을 생성할 수 있습니다.",
     "outputTypeStructuredNote": "구조화된 프롬프트는 다양한 출력 유형을 생성할 수 있습니다",
     "inputTypes": {
       "text": "텍스트 프롬프트",
@@ -169,9 +209,20 @@
     "copyPrompt": "프롬프트 복사",
     "sharePrompt": "프롬프트 공유",
     "confirmDelete": "이 프롬프트를 삭제하시겠습니까?",
-    "promptCreated": "프롬프트 생성됨",
-    "promptUpdated": "프롬프트 업데이트됨",
+    "promptCreated": "프롬프트가 생성되었습니다",
+    "promptUpdated": "프롬프트가 업데이트되었습니다",
+    "rateLimitError": "다른 프롬프트를 생성하기 전에 30초 기다려주세요",
+    "duplicatePromptError": "동일한 제목 또는 내용의 프롬프트가 이미 있습니다",
+    "contentExistsError": "이 내용의 프롬프트가 이미 존재합니다: \"{title}\" - {author}",
     "run": "실행",
+    "downloadMarkdown": "MD 다운로드",
+    "downloadYaml": "YAML 다운로드",
+    "copyMarkdownUrl": "MD 링크 복사",
+    "copyYamlUrl": "YAML 링크 복사",
+    "downloadStarted": "다운로드 시작",
+    "downloadFailed": "다운로드 실패",
+    "urlCopied": "링크 복사됨",
+    "failedToCopyUrl": "링크 복사 실패",
     "promptCopied": "프롬프트 복사됨",
     "promptCopiedDescription": "프롬프트가 클립보드에 복사되었습니다. {platform}을 연 후 붙여넣기 하세요.",
     "openPlatform": "{platform} 열기",
@@ -226,7 +277,12 @@
     "supportedFormat": "지원 형식",
     "or": "또는",
     "detectedVariables": "변수",
-    "clickToEdit": "클릭하여 편집"
+    "clickToEdit": "클릭하여 편집",
+    "translateToLanguage": "내 언어로 번역",
+    "translated": "콘텐츠가 번역됨",
+    "translationFailed": "번역 실패",
+    "alreadyTranslated": "이미 번역됨",
+    "learnHowToWritePrompts": "효과적인 프롬프트 작성법 배우기 →"
   },
   "changeRequests": {
     "title": "변경 요청",
@@ -376,7 +432,35 @@
       "regenerateEmbeddings": "모든 임베딩 재생성",
       "pending": "대기 중",
       "embeddingsSuccess": "{count}개 임베딩 생성됨",
-      "embeddingsResult": "생성됨: {success}, 실패: {failed}"
+      "embeddingsResult": "생성됨: {success}, 실패: {failed}",
+      "slugsTitle": "URL 슬러그",
+      "generateSlugs": "슬러그 생성",
+      "regenerateSlugs": "모든 슬러그 재생성 (제목을 영어로 번역)",
+      "slugsSuccess": "{count}개 슬러그 생성됨",
+      "slugsResult": "생성됨: {success}, 실패: {failed}"
+    },
+    "promptsList": {
+      "title": "모든 프롬프트",
+      "description": "시스템의 모든 프롬프트 탐색 및 관리",
+      "noPrompts": "프롬프트를 찾을 수 없습니다",
+      "private": "비공개",
+      "unlisted": "목록 제외",
+      "views": "조회",
+      "votes": "투표",
+      "created": "생성일",
+      "showing": "{total}개 중 {from}-{to} 표시",
+      "deleteConfirmTitle": "프롬프트를 삭제하시겠습니까?",
+      "deleteConfirmDescription": "\"{title}\"을(를) 영구적으로 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.",
+      "deleted": "프롬프트가 삭제되었습니다",
+      "filters": {
+        "all": "전체",
+        "public": "공개",
+        "private": "비공개",
+        "unlisted": "목록 제외",
+        "featured": "추천",
+        "reported": "신고됨",
+        "deleted": "삭제됨"
+      }
     },
     "users": {
       "title": "사용자 관리",
@@ -400,7 +484,17 @@
       "unverified": "인증 해제됨",
       "verifyFailed": "인증 업데이트 실패",
       "deleteConfirmTitle": "사용자를 삭제하시겠습니까?",
-      "deleteConfirmDescription": "이 작업은 취소할 수 없습니다. 모든 사용자 데이터가 영구적으로 삭제됩니다."
+      "deleteConfirmDescription": "이 작업은 취소할 수 없습니다. 모든 사용자 데이터가 영구적으로 삭제됩니다.",
+      "searchPlaceholder": "사용자 검색...",
+      "noUsers": "사용자를 찾을 수 없습니다",
+      "showing": "{total}명 중 {from}-{to} 표시",
+      "filters": {
+        "all": "전체",
+        "admin": "관리자",
+        "user": "사용자",
+        "verified": "인증됨",
+        "unverified": "미인증"
+      }
     },
     "categories": {
       "title": "카테고리 관리",
@@ -559,7 +653,8 @@
     "contributionsCount": "기여",
     "noContributions": "아직 기여가 없습니다",
     "noContributionsOwner": "아직 프롬프트에 기여하지 않았습니다",
-    "contributedTo": "{author}의 프롬프트에 기여함"
+    "contributedTo": "{author}의 프롬프트에 기여함",
+    "privatePromptsNote": "{count}개의 비공개 프롬프트가 있습니다. 지원되는 클라이언트에서 API 키를 사용하여 MCP를 통해 액세스할 수 있습니다."
   },
   "subscription": {
     "subscribe": "구독",
@@ -640,11 +735,15 @@
     "latestPrompts": "최신 프롬프트",
     "achievements": {
       "featuredIn": "소개됨",
+      "referencedBy": "참조됨",
       "forbes": "Forbes",
+      "harvardUniversity": "하버드 대학교",
       "mostLikedDataset": "Hugging Face에서 #1 가장 많이 좋아요 받은 데이터셋",
       "githubStars": "GitHub 스타",
       "mostStarredRepo": "세계에서 #33 가장 많은 스타 받은 저장소",
       "usedByThousands": "매일 수천 명이 사용",
+      "githubStaffPick": "GitHub 스태프 추천",
+      "fullyOpenSource": "유일한 100% 무료 & 오픈 소스 프롬프트 라이브러리",
       "sponsoredBy": "후원",
       "becomeSponsor": "후원자 되기"
     }
@@ -652,7 +751,36 @@
   "notifications": {
     "title": "알림",
     "pendingChangeRequests": "대기 중인 변경 요청",
-    "noNotifications": "알림 없음"
+    "noNotifications": "알림 없음",
+    "markAllRead": "모두 읽음으로 표시",
+    "commentedOnPrompt": "님이 프롬프트에 댓글을 남겼습니다",
+    "repliedToComment": "님이 댓글에 답글을 남겼습니다"
+  },
+  "comments": {
+    "comments": "댓글",
+    "writeComment": "댓글을 작성하세요...",
+    "postComment": "댓글 작성",
+    "reply": "답글",
+    "replyTo": "@{username}님에게 답글...",
+    "posting": "게시 중...",
+    "commentPosted": "댓글이 게시되었습니다",
+    "commentDeleted": "댓글이 삭제되었습니다",
+    "commentFlagged": "댓글이 신고되었습니다",
+    "commentUnflagged": "신고가 취소되었습니다",
+    "noComments": "아직 댓글이 없습니다. 첫 댓글을 남겨보세요!",
+    "loginToComment": "댓글을 작성하려면 로그인하세요.",
+    "loginToVote": "투표하려면 로그인하세요.",
+    "upvote": "추천",
+    "downvote": "비추천",
+    "flag": "신고",
+    "unflag": "신고 취소",
+    "flagged": "신고됨",
+    "admin": "관리자",
+    "deleteCommentTitle": "댓글을 삭제하시겠습니까?",
+    "deleteCommentDescription": "이 작업은 취소할 수 없습니다. 댓글과 모든 답글이 영구적으로 삭제됩니다.",
+    "deleting": "삭제 중...",
+    "showReplies": "{count}개의 답글 보기",
+    "hideReplies": "답글 숨기기"
   },
   "promptmasters": {
     "title": "프롬프트마스터",
@@ -756,6 +884,112 @@
     "categories": "카테고리",
     "categoryPlaceholder": "카테고리 슬러그 추가...",
     "tags": "태그",
-    "tagPlaceholder": "태그 슬러그 추가..."
+    "tagPlaceholder": "태그 슬러그 추가...",
+    "generateApiKey": "MCP를 통해 프롬프트를 저장하려면 API 키를 생성하세요"
+  },
+  "footer": {
+    "howTo": "사용법",
+    "docs": "문서",
+    "api": "API",
+    "privacy": "개인정보",
+    "terms": "약관"
+  },
+  "apiKey": {
+    "title": "MCP API 키",
+    "description": "MCP를 통해 프롬프트를 저장하고 비공개 프롬프트에 접근하려면 API 키를 생성하세요.",
+    "yourApiKey": "API 키",
+    "keyWarning": "이 키를 비밀로 유지하세요. 이 키를 가진 사람은 비공개 프롬프트에 접근하고 대신 프롬프트를 만들 수 있습니다.",
+    "noApiKey": "아직 API 키를 생성하지 않았습니다.",
+    "generate": "API 키 생성",
+    "regenerate": "재생성",
+    "revoke": "취소",
+    "regenerateTitle": "API 키를 재생성하시겠습니까?",
+    "regenerateDescription": "현재 API 키가 무효화됩니다. 이전 키를 사용하는 MCP 클라이언트는 업데이트가 필요합니다.",
+    "revokeTitle": "API 키를 취소하시겠습니까?",
+    "revokeDescription": "API 키가 영구적으로 삭제됩니다. 새 키를 생성할 때까지 인증이 필요한 MCP 기능을 사용할 수 없습니다.",
+    "keyGenerated": "API 키가 성공적으로 생성되었습니다",
+    "keyRegenerated": "API 키가 성공적으로 재생성되었습니다",
+    "keyRevoked": "API 키가 취소되었습니다",
+    "publicByDefault": "기본적으로 공개 프롬프트",
+    "publicByDefaultDescription": "MCP를 통해 프롬프트를 저장할 때 비공개 대신 기본적으로 공개로 설정합니다.",
+    "settingUpdated": "설정이 업데이트되었습니다"
+  },
+  "promptWritingGuide": {
+    "title": "좋은 프롬프트 작성법",
+    "subtitle": "효과적인 AI 프롬프트를 만들기 위한 팁, 예시, 모범 사례",
+    "generalTips": {
+      "title": "효과적인 프롬프트를 위한 일반 팁",
+      "beSpecific": {
+        "title": "구체적이고 명확하게",
+        "description": "모호한 프롬프트는 모호한 응답으로 이어집니다. 형식, 길이, 톤, 제약 조건 등 원하는 것을 정확히 지정하세요."
+      },
+      "provideContext": {
+        "title": "맥락 제공",
+        "description": "AI가 요구사항을 이해하는 데 도움이 되는 배경 정보를 제공하세요. 누가, 무엇을, 왜, 누구를 위해를 포함하세요."
+      },
+      "defineFormat": {
+        "title": "출력 형식 정의",
+        "description": "응답이 어떻게 구성되기를 원하는지 지정하세요: 글머리 기호, 단락, 코드 블록, 표 등."
+      },
+      "setConstraints": {
+        "title": "제약 조건 설정",
+        "description": "단어 수, 읽기 수준, 피해야 할 것, 따라야 할 특정 요구사항 등의 제한을 포함하세요."
+      },
+      "includeExamples": {
+        "title": "예시 포함",
+        "description": "좋은 출력이 어떤 것인지 AI에게 보여주세요. 예시는 응답 스타일과 품질을 조정하는 데 도움이 됩니다."
+      }
+    },
+    "rolePlaying": {
+      "title": "역할극: \"~로서 행동하라\" 패턴",
+      "description": "가장 강력한 프롬프트 기법 중 하나는 AI에게 특정 역할이나 페르소나를 할당하는 것입니다. 이는 전문성, 톤, 관점을 확립하는 데 도움이 됩니다.",
+      "basicPattern": "기본 역할 패턴",
+      "exampleExpert": "예시: 기술 전문가",
+      "exampleCreative": "예시: 창작 코치",
+      "popularRoles": "인기 역할 카테고리"
+    },
+    "variables": {
+      "title": "동적 프롬프트를 위한 변수 사용",
+      "description": "변수는 프롬프트를 재사용 가능하고 사용자 정의할 수 있게 만듭니다. 사용자는 프롬프트를 사용할 때마다 다른 값을 입력할 수 있습니다.",
+      "syntax": "변수 구문",
+      "requiredVar": "필수 변수 (사용자가 입력해야 함)",
+      "withDefault": "기본값이 있는 변수",
+      "simpleExample": "간단한 예시",
+      "advancedExample": "여러 변수를 사용한 고급 예시",
+      "bestPractices": "모범 사례",
+      "tip1": "설명적인 변수 이름 사용: '$'{topic}이 '$'{x}보다 좋음",
+      "tip2": "선택적 값에 합리적인 기본값 제공",
+      "tip3": "프롬프트에서 관련 변수를 함께 그룹화",
+      "tip4": "여러 단어 이름에 밑줄 사용: '$'{target_audience}"
+    },
+    "structured": {
+      "title": "구조화된 프롬프트 (JSON/YAML)",
+      "description": "구조화된 프롬프트는 복잡한 지시사항을 명확하게 정리하기 위해 JSON 또는 YAML 형식을 사용합니다. 다단계 워크플로우, 에이전트, 상세한 구성에 이상적입니다.",
+      "whenToUse": "구조화된 프롬프트를 사용할 때",
+      "useCase1": "복잡한 다단계 워크플로우 또는 파이프라인",
+      "useCase2": "여러 매개변수가 있는 에이전트 구성",
+      "useCase3": "많은 상호 연결된 설정이 있는 프롬프트",
+      "useCase4": "API 기반 또는 프로그래밍적 프롬프트 사용",
+      "jsonExample": "JSON 예시: 면접 어시스턴트",
+      "yamlExample": "YAML 예시: 콘텐츠 생성기",
+      "agentWorkflow": "JSON 예시: 에이전트 워크플로우",
+      "tips": "구조화된 프롬프트 팁",
+      "tip1": "프로그래밍적 사용에는 JSON, 읽기 쉬운 구성에는 YAML 사용",
+      "tip2": "가독성을 위해 중첩을 얕게 유지 (최대 2-3 레벨)",
+      "tip3": "복잡한 섹션을 설명하기 위해 YAML에 주석 포함",
+      "tip4": "저장하기 전에 JSON/YAML 구문 검증"
+    },
+    "outputOptimization": {
+      "title": "출력 최적화",
+      "description": "요구사항을 명확히 하여 AI가 필요한 형식과 스타일을 정확하게 생성하도록 안내합니다.",
+      "formatInstructions": "형식 지침 템플릿",
+      "constraintExamples": "일반적인 제약 유형",
+      "lengthConstraints": "길이 제약:",
+      "lengthExample": "\"응답을 200단어 이하로 유지\" / \"정확히 5개의 글머리 기호 제공\"",
+      "styleConstraints": "스타일 제약:",
+      "styleExample": "\"초보자에게 적합한 간단한 언어 사용\" / \"기술적이고 정확하게\"",
+      "contentConstraints": "내용 제약:",
+      "contentExample": "\"개인적인 의견 포함하지 않음\" / \"사실 정보에만 집중\""
+    }
   }
 }

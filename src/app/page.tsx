@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { ArrowRight, Star, Heart, Trophy, Users, HeartHandshake, Code, Lock, Building2, Github } from "lucide-react";
+import { ArrowRight, Star, Heart, Trophy, Users, HeartHandshake, Code, Lock, Building2, Github, GraduationCap } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { getConfig } from "@/lib/config";
 import { Button } from "@/components/ui/button";
@@ -79,7 +79,7 @@ export default async function HomePage() {
                 playsInline
                 className="absolute top-1/2 -translate-y-1/2 end-0 w-full h-auto opacity-30 dark:opacity-15 dark:invert"
               >
-                <source src="/animation.mp4" type="video/mp4" />
+                <source src="/animation_compressed.mp4" type="video/mp4" />
               </video>
             </div>
             {/* Animated input overlay - only show if AI generation is enabled */}
@@ -185,6 +185,15 @@ export default async function HomePage() {
                 <span>{tHomepage("achievements.featuredIn")} <strong>{tHomepage("achievements.forbes")}</strong></span>
               </Link>
               <Link 
+                href="https://www.huit.harvard.edu/news/ai-prompts" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <GraduationCap className="h-4 w-4 text-[#A51C30]" />
+                <span>{tHomepage("achievements.referencedBy")} <strong>{tHomepage("achievements.harvardUniversity")}</strong></span>
+              </Link>
+              <Link 
                 href="https://huggingface.co/datasets/fka/awesome-chatgpt-prompts" 
                 target="_blank" 
                 rel="noopener noreferrer"
@@ -215,6 +224,19 @@ export default async function HomePage() {
                 <Users className="h-4 w-4 text-green-500" />
                 <span>{tHomepage("achievements.usedByThousands")}</span>
               </span>
+              <Link 
+                href="https://spotlights-feed.github.com/spotlights/prompts-chat/index/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Github className="h-4 w-4 text-purple-600" />
+                <span>{tHomepage("achievements.githubStaffPick")}</span>
+              </Link>
+              <span className="flex items-center gap-2 text-muted-foreground">
+                <Code className="h-4 w-4 text-blue-500" />
+                <span>{tHomepage("achievements.fullyOpenSource")}</span>
+              </span>
             </div>
           </div>
         </section>
@@ -238,7 +260,7 @@ export default async function HomePage() {
                 </Link>
               </div>
             )}
-            <div className="flex flex-wrap items-center justify-center gap-8">
+            <div className="flex flex-col md:flex-row flex-wrap items-center justify-center gap-4 md:gap-8">
               {config.homepage.sponsors.items.map((sponsor) => (
                 <Link
                   key={sponsor.name}
@@ -257,6 +279,40 @@ export default async function HomePage() {
                 </Link>
               ))}
             </div>
+            {!useCloneBranding && (
+              <div className="flex flex-col md:flex-row items-center justify-center gap-1.5 mt-6 pt-7 border-t text-xs text-muted-foreground">
+                <span><b>prompts.chat</b> is built with</span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Link href="https://wind.surf/prompts-chat" target="_blank" rel="noopener noreferrer">
+                    <Image
+                      src="/sponsors/windsurf.svg"
+                      alt="Windsurf"
+                      width={80}
+                      height={20}
+                      className="h-3 w-auto dark:invert"
+                    />
+                  </Link>
+                  <span>and</span>
+                  <Link href="https://devin.ai/?utm_source=prompts.chat" target="_blank" rel="noopener noreferrer">
+                    <Image
+                      src="/sponsors/devin.svg"
+                      alt="Devin"
+                      width={80}
+                      height={20}
+                      className="h-6 w-auto dark:hidden"
+                    />
+                    <Image
+                      src="/sponsors/devin-dark.svg"
+                      alt="Devin"
+                      width={80}
+                      height={20}
+                      className="h-6 w-auto hidden dark:block"
+                    />
+                  </Link>
+                  <span>by Cognition</span>
+                </span>
+              </div>
+            )}
           </div>
         </section>
       )}

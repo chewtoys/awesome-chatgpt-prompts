@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { RunPromptButton } from "./run-prompt-button";
+import { TranslateButton } from "./translate-button";
+import { DownloadPromptDropdown } from "./download-prompt-dropdown";
 import { CodeView } from "@/components/ui/code-view";
 import { prettifyJson } from "@/lib/format";
 
@@ -23,6 +25,11 @@ interface InteractivePromptContentProps {
   isStructured?: boolean;
   structuredFormat?: "json" | "yaml";
   title?: string;
+  isLoggedIn?: boolean;
+  categoryName?: string;
+  parentCategoryName?: string;
+  promptId?: string;
+  promptSlug?: string;
 }
 
 // Parse ${variablename:defaultvalue} or ${variablename} patterns
@@ -57,28 +64,59 @@ function getUniqueVariables(variables: Variable[]): { name: string; defaultValue
 function EditableSpan({
   value,
   onChange,
+  placeholder,
 }: {
   value: string;
   onChange: (value: string) => void;
+  placeholder: string;
 }) {
   const spanRef = useRef<HTMLSpanElement>(null);
+  const [isShowingPlaceholder, setIsShowingPlaceholder] = useState(!value);
 
   useEffect(() => {
-    if (spanRef.current && spanRef.current.textContent !== value) {
-      spanRef.current.textContent = value;
+    if (spanRef.current) {
+      if (!value && !document.activeElement?.isSameNode(spanRef.current)) {
+        // Show placeholder when empty and not focused
+        spanRef.current.textContent = placeholder;
+        setIsShowingPlaceholder(true);
+      } else if (value && spanRef.current.textContent !== value) {
+        spanRef.current.textContent = value;
+        setIsShowingPlaceholder(false);
+      }
     }
-  }, [value]);
+  }, [value, placeholder]);
 
   const handleInput = () => {
     if (spanRef.current) {
       const newValue = spanRef.current.textContent || "";
       onChange(newValue);
+      setIsShowingPlaceholder(false);
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       e.preventDefault();
+    }
+  };
+
+  const handleFocus = () => {
+    if (spanRef.current && isShowingPlaceholder) {
+      // Clear placeholder on focus
+      spanRef.current.textContent = "";
+      setIsShowingPlaceholder(false);
+    }
+  };
+
+  const handleBlur = () => {
+    if (spanRef.current) {
+      const currentValue = spanRef.current.textContent || "";
+      if (!currentValue.trim()) {
+        // Refill with placeholder if empty on blur
+        spanRef.current.textContent = placeholder;
+        setIsShowingPlaceholder(true);
+        onChange("");
+      }
     }
   };
 
@@ -89,7 +127,13 @@ function EditableSpan({
       suppressContentEditableWarning
       onInput={handleInput}
       onKeyDown={handleKeyDown}
-      className="inline bg-primary/10 border-b-2 border-primary/40 px-1 rounded-sm outline-none focus:border-primary focus:bg-primary/15 min-w-[2ch] cursor-text"
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      className={`inline border-b-2 px-1 rounded-sm outline-none min-w-[2ch] cursor-text ${
+        isShowingPlaceholder
+          ? "bg-primary/5 border-primary/20 text-muted-foreground/60"
+          : "bg-primary/10 border-primary/40 focus:border-primary focus:bg-primary/15"
+      }`}
     />
   );
 }
@@ -99,10 +143,19 @@ export function InteractivePromptContent({
   className,
   isStructured = false,
   structuredFormat = "json",
-  title
+  title,
+  isLoggedIn = false,
+  categoryName,
+  parentCategoryName,
+  promptId,
+  promptSlug
 }: InteractivePromptContentProps) {
   const t = useTranslations("common");
   const [copied, setCopied] = useState(false);
+  const [translatedContent, setTranslatedContent] = useState<string | null>(null);
+
+  // Use translated content if available, otherwise use original
+  const displayedContent = translatedContent || content;
 
   // Parse variables from content
   const variables = useMemo(() => parseVariables(content), [content]);
@@ -142,24 +195,24 @@ export function InteractivePromptContent({
 
   // Get the final content with variables replaced
   const getFinalContent = useCallback(() => {
-    let result = content;
+    let result = displayedContent;
     for (const variable of variables) {
       // Use the value if set, otherwise use default
       const value = values[variable.name] || variable.defaultValue;
       result = result.replace(variable.fullMatch, value);
     }
     return result;
-  }, [content, variables, values]);
+  }, [displayedContent, variables, values]);
 
   // Get content with custom variable values (for RunPromptButton dialog)
   const getContentWithVariables = useCallback((customValues: Record<string, string>) => {
-    let result = content;
+    let result = displayedContent;
     for (const variable of variables) {
       const value = customValues[variable.name] || values[variable.name] || variable.defaultValue;
       result = result.replace(variable.fullMatch, value);
     }
     return result;
-  }, [content, variables, values]);
+  }, [displayedContent, variables, values]);
 
   // Get unfilled variables (empty current value and no default)
   const unfilledVariables = useMemo(() => {
@@ -193,8 +246,13 @@ export function InteractivePromptContent({
 
   // Prettify JSON content for display
   const displayContent = isStructured && structuredFormat === "json" 
-    ? prettifyJson(content) 
-    : content;
+    ? prettifyJson(displayedContent) 
+    : displayedContent;
+
+  // Handle translation callback
+  const handleTranslate = useCallback((translated: string) => {
+    setTranslatedContent(translated);
+  }, []);
 
   // If no variables, render simple content
   if (variables.length === 0) {
@@ -202,13 +260,23 @@ export function InteractivePromptContent({
       return (
         <div className={className}>
           <div className="flex items-center justify-between mb-3">
-            {title && <h3 className="text-base font-semibold">{title}</h3>}
+            <div className="flex items-center gap-1">
+              {title && <h3 className="text-base font-semibold">{title}</h3>}
+              <TranslateButton
+                content={content}
+                onTranslate={handleTranslate}
+                isLoggedIn={isLoggedIn}
+              />
+            </div>
             <div className="flex items-center gap-2">
+              {promptId && <DownloadPromptDropdown promptId={promptId} promptSlug={promptSlug} />}
               <RunPromptButton 
                 content={displayContent}
                 unfilledVariables={unfilledVariables}
                 onVariablesFilled={handleVariablesFilled}
                 getContentWithVariables={getContentWithVariables}
+                categoryName={categoryName}
+                parentCategoryName={parentCategoryName}
               />
               <Button variant="ghost" size="sm" onClick={copyToClipboard}>
                 {copied ? (
@@ -230,13 +298,23 @@ export function InteractivePromptContent({
     return (
       <div className={className}>
         <div className="flex items-center justify-between mb-3">
-          {title && <h3 className="text-base font-semibold">{title}</h3>}
-          <div className="flex items-center gap-2">
-            <RunPromptButton 
+          <div className="flex items-center gap-1">
+            {title && <h3 className="text-base font-semibold">{title}</h3>}
+            <TranslateButton
               content={content}
+              onTranslate={handleTranslate}
+              isLoggedIn={isLoggedIn}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            {promptId && <DownloadPromptDropdown promptId={promptId} promptSlug={promptSlug} />}
+            <RunPromptButton 
+              content={displayedContent}
               unfilledVariables={unfilledVariables}
               onVariablesFilled={handleVariablesFilled}
               getContentWithVariables={getContentWithVariables}
+              categoryName={categoryName}
+              parentCategoryName={parentCategoryName}
             />
             <Button variant="ghost" size="sm" onClick={copyToClipboard}>
               {copied ? (
@@ -248,7 +326,7 @@ export function InteractivePromptContent({
           </div>
         </div>
         <pre className="whitespace-pre-wrap text-sm bg-muted p-4 rounded-lg font-mono border">
-          {content}
+          {displayedContent}
         </pre>
       </div>
     );
@@ -260,7 +338,14 @@ export function InteractivePromptContent({
       <div className={className}>
         {/* Header with title and action buttons */}
         <div className="flex items-center justify-between mb-3">
-          {title && <h3 className="text-base font-semibold">{title}</h3>}
+          <div className="flex items-center gap-1">
+            {title && <h3 className="text-base font-semibold">{title}</h3>}
+            <TranslateButton
+              content={content}
+              onTranslate={handleTranslate}
+              isLoggedIn={isLoggedIn}
+            />
+          </div>
           <div className="flex items-center gap-2">
             {isModified && (
               <Button variant="ghost" size="sm" onClick={handleReset} className="h-7 px-2 text-xs">
@@ -268,11 +353,14 @@ export function InteractivePromptContent({
                 {t("reset")}
               </Button>
             )}
+            {promptId && <DownloadPromptDropdown promptId={promptId} promptSlug={promptSlug} />}
             <RunPromptButton 
               content={getFinalContent()}
               unfilledVariables={unfilledVariables}
               onVariablesFilled={handleVariablesFilled}
               getContentWithVariables={getContentWithVariables}
+              categoryName={categoryName}
+              parentCategoryName={parentCategoryName}
             />
             <Button variant="ghost" size="sm" onClick={copyToClipboard}>
               {copied ? (
@@ -321,10 +409,10 @@ export function InteractivePromptContent({
     let match;
     let keyIndex = 0;
 
-    while ((match = regex.exec(content)) !== null) {
+    while ((match = regex.exec(displayedContent)) !== null) {
       // Add text before the variable
       if (match.index > lastIndex) {
-        parts.push(content.slice(lastIndex, match.index));
+        parts.push(displayedContent.slice(lastIndex, match.index));
       }
 
       const name = match[1].trim();
@@ -336,6 +424,7 @@ export function InteractivePromptContent({
           key={keyIndex++}
           value={currentValue}
           onChange={(newValue) => updateValue(name, newValue)}
+          placeholder={name}
         />
       );
 
@@ -343,8 +432,8 @@ export function InteractivePromptContent({
     }
 
     // Add remaining text
-    if (lastIndex < content.length) {
-      parts.push(content.slice(lastIndex));
+    if (lastIndex < displayedContent.length) {
+      parts.push(displayedContent.slice(lastIndex));
     }
 
     return parts;
@@ -353,7 +442,14 @@ export function InteractivePromptContent({
   return (
     <div className={className}>
       <div className="flex items-center justify-between mb-3">
-        {title && <h3 className="text-base font-semibold">{title}</h3>}
+        <div className="flex items-center gap-1">
+          {title && <h3 className="text-base font-semibold">{title}</h3>}
+          <TranslateButton
+            content={content}
+            onTranslate={handleTranslate}
+            isLoggedIn={isLoggedIn}
+          />
+        </div>
         <div className="flex items-center gap-2">
           {isModified && (
             <Button variant="ghost" size="sm" onClick={handleReset} className="h-7 px-2 text-xs">
@@ -361,11 +457,14 @@ export function InteractivePromptContent({
               {t("reset")}
             </Button>
           )}
+          {promptId && <DownloadPromptDropdown promptId={promptId} promptSlug={promptSlug} />}
           <RunPromptButton 
             content={getFinalContent()}
             unfilledVariables={unfilledVariables}
             onVariablesFilled={handleVariablesFilled}
             getContentWithVariables={getContentWithVariables}
+            categoryName={categoryName}
+            parentCategoryName={parentCategoryName}
           />
           <Button variant="ghost" size="sm" onClick={copyToClipboard}>
             {copied ? (

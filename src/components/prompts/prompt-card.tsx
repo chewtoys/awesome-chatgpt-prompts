@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { formatDistanceToNow } from "@/lib/date";
+import { getPromptUrl } from "@/lib/urls";
 import { ArrowBigUp, Lock, Copy, ImageIcon, Play } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { CodeView } from "@/components/ui/code-view";
@@ -23,6 +24,7 @@ import {
 export interface PromptCardProps {
   prompt: {
     id: string;
+    slug?: string | null;
     title: string;
     description: string | null;
     content: string;
@@ -49,6 +51,11 @@ export interface PromptCardProps {
       id: string;
       name: string;
       slug: string;
+      parent?: {
+        id: string;
+        name: string;
+        slug: string;
+      } | null;
     } | null;
     tags: Array<{
       tag: {
@@ -130,7 +137,7 @@ export function PromptCard({ prompt, showPinButton = false, isPinned = false }: 
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex items-center gap-1 flex-1 min-w-0">
             {prompt.isPrivate && <Lock className="h-3 w-3 text-muted-foreground shrink-0" />}
-            <Link href={`/prompts/${prompt.id}`} className="font-medium text-sm hover:underline line-clamp-1">
+            <Link href={getPromptUrl(prompt.id, prompt.slug)} prefetch={false} className="font-medium text-sm hover:underline line-clamp-1">
               {prompt.title}
             </Link>
           </div>
@@ -184,6 +191,7 @@ export function PromptCard({ prompt, showPinButton = false, isPinned = false }: 
               <Link 
                 key={tag.id}
                 href={`/tags/${tag.slug}`}
+                prefetch={false}
                 className="px-1.5 py-0.5 rounded text-[10px] hover:opacity-80 transition-opacity" 
                 style={{ backgroundColor: tag.color + "15", color: tag.color }}
               >
@@ -199,7 +207,7 @@ export function PromptCard({ prompt, showPinButton = false, isPinned = false }: 
         {/* Footer */}
         <div className="flex items-center justify-between text-[11px] text-muted-foreground pt-2 border-t mt-auto">
           <div className="flex items-center gap-1.5">
-            <Link href={`/@${prompt.author.username}`} className="hover:text-foreground flex items-center gap-1.5">
+            <Link href={`/@${prompt.author.username}`} prefetch={false} className="hover:text-foreground flex items-center gap-1.5">
               <Avatar className="h-4 w-4">
                 <AvatarImage src={prompt.author.avatar || undefined} alt={prompt.author.username} />
                 <AvatarFallback className="text-[8px]">{prompt.author.username[0]?.toUpperCase()}</AvatarFallback>
@@ -218,6 +226,7 @@ export function PromptCard({ prompt, showPinButton = false, isPinned = false }: 
                       <Link
                         key={contributor.id}
                         href={`/@${contributor.username}`}
+                        prefetch={false}
                         className="flex items-center gap-2 hover:underline rounded px-1 py-0.5 -mx-1"
                       >
                         <Avatar className="h-4 w-4">
@@ -259,7 +268,9 @@ export function PromptCard({ prompt, showPinButton = false, isPinned = false }: 
                 content={prompt.content} 
                 size="icon" 
                 variant="ghost" 
-                className="h-6 w-6" 
+                className="h-6 w-6"
+                categoryName={prompt.category?.name}
+                parentCategoryName={prompt.category?.parent?.name}
               />
             )}
           </div>

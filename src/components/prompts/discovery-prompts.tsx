@@ -20,7 +20,11 @@ export async function DiscoveryPrompts({ isHomepage = false }: DiscoveryPromptsP
       select: { id: true, name: true, username: true, avatar: true },
     },
     category: {
-      select: { id: true, name: true, slug: true },
+      include: {
+        parent: {
+          select: { id: true, name: true, slug: true },
+        },
+      },
     },
     tags: {
       include: { tag: true },
@@ -132,7 +136,7 @@ export async function DiscoveryPrompts({ isHomepage = false }: DiscoveryPromptsP
                 <h2 className="text-xl font-semibold">{tDiscovery("featuredPrompts")}</h2>
               </div>
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/prompts">
+                <Link href="/prompts" prefetch={false}>
                   {t("browseAll")}
                   <ArrowRight className="ml-1.5 h-4 w-4" />
                 </Link>
@@ -157,7 +161,7 @@ export async function DiscoveryPrompts({ isHomepage = false }: DiscoveryPromptsP
                 <h2 className="text-xl font-semibold">{tDiscovery("todaysMostUpvoted")}</h2>
               </div>
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/prompts">
+                <Link href="/prompts" prefetch={false}>
                   {t("browseAll")}
                   <ArrowRight className="ml-1.5 h-4 w-4" />
                 </Link>
@@ -182,7 +186,7 @@ export async function DiscoveryPrompts({ isHomepage = false }: DiscoveryPromptsP
                 <h2 className="text-xl font-semibold">{tDiscovery("latestPrompts")}</h2>
               </div>
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/prompts">
+                <Link href="/prompts" prefetch={false}>
                   {t("browseAll")}
                   <ArrowRight className="ml-1.5 h-4 w-4" />
                 </Link>
@@ -207,7 +211,7 @@ export async function DiscoveryPrompts({ isHomepage = false }: DiscoveryPromptsP
                 <h2 className="text-xl font-semibold">{tDiscovery("recentlyUpdated")}</h2>
               </div>
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/prompts">
+                <Link href="/prompts" prefetch={false}>
                   {t("browseAll")}
                   <ArrowRight className="ml-1.5 h-4 w-4" />
                 </Link>
@@ -232,7 +236,7 @@ export async function DiscoveryPrompts({ isHomepage = false }: DiscoveryPromptsP
                 <h2 className="text-xl font-semibold">{tDiscovery("mostContributed")}</h2>
               </div>
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/prompts">
+                <Link href="/prompts" prefetch={false}>
                   {t("browseAll")}
                   <ArrowRight className="ml-1.5 h-4 w-4" />
                 </Link>

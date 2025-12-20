@@ -4,6 +4,10 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { triggerWebhooks } from "@/lib/webhook";
 import { generatePromptEmbedding } from "@/lib/ai/embeddings";
+import { generatePromptSlug } from "@/lib/slug";
+import { checkPromptQuality } from "@/lib/ai/quality-check";
+import { isSimilarContent, normalizeContent } from "@/lib/similarity";
+import { revalidatePrompts } from "@/lib/cache";
 
 const promptSchema = z.object({
   title: z.string().min(1).max(200),
@@ -44,10 +48,97 @@ export async function POST(request: Request) {
 
     const { title, description, content, type, structuredFormat, categoryId, tagIds, contributorIds, isPrivate, mediaUrl, requiresMediaUpload, requiredMediaType, requiredMediaCount } = parsed.data;
 
+    // Rate limit: Check if user created a prompt in the last 30 seconds
+    const thirtySecondsAgo = new Date(Date.now() - 30 * 1000);
+    const recentPrompt = await db.prompt.findFirst({
+      where: {
+        authorId: session.user.id,
+        createdAt: { gte: thirtySecondsAgo },
+      },
+      select: { id: true },
+    });
+
+    if (recentPrompt) {
+      return NextResponse.json(
+        { error: "rate_limit", message: "Please wait 30 seconds before creating another prompt" },
+        { status: 429 }
+      );
+    }
+
+    // Check for duplicate title or content from the same user
+    const userDuplicate = await db.prompt.findFirst({
+      where: {
+        authorId: session.user.id,
+        deletedAt: null,
+        OR: [
+          { title: { equals: title, mode: "insensitive" } },
+          { content: content },
+        ],
+      },
+      select: { id: true, slug: true, title: true },
+    });
+
+    if (userDuplicate) {
+      return NextResponse.json(
+        { 
+          error: "duplicate_prompt", 
+          message: "You already have a prompt with the same title or content",
+          existingPromptId: userDuplicate.id,
+          existingPromptSlug: userDuplicate.slug,
+        },
+        { status: 409 }
+      );
+    }
+
+    // Check for similar content system-wide (any user)
+    // First, get a batch of public prompts to check similarity against
+    const normalizedNewContent = normalizeContent(content);
+    
+    // Only check if normalized content has meaningful length
+    if (normalizedNewContent.length > 50) {
+      // Get recent public prompts to check for similarity (limit to avoid performance issues)
+      const publicPrompts = await db.prompt.findMany({
+        where: {
+          deletedAt: null,
+          isPrivate: false,
+        },
+        select: { 
+          id: true, 
+          slug: true, 
+          title: true, 
+          content: true,
+          author: { select: { username: true } } 
+        },
+        orderBy: { createdAt: "desc" },
+        take: 1000, // Check against last 1000 public prompts
+      });
+
+      // Find similar content using our similarity algorithm
+      const similarPrompt = publicPrompts.find(p => isSimilarContent(content, p.content));
+
+      if (similarPrompt) {
+        return NextResponse.json(
+          { 
+            error: "content_exists", 
+            message: "A prompt with similar content already exists",
+            existingPromptId: similarPrompt.id,
+            existingPromptSlug: similarPrompt.slug,
+            existingPromptTitle: similarPrompt.title,
+            existingPromptAuthor: similarPrompt.author.username,
+          },
+          { status: 409 }
+        );
+      }
+    }
+
+    // Generate slug from title (translated to English)
+    const slug = await generatePromptSlug(title);
+
     // Create prompt with tags
     const prompt = await db.prompt.create({
       data: {
         title,
+        slug,
         description: description || null,
         content,
         type,
@@ -79,7 +170,11 @@ export async function POST(request: Request) {
             avatar: true,
           },
         },
-        category: true,
+        category: {
+          include: {
+            parent: true,
+          },
+        },
         tags: {
           include: {
             tag: true,
@@ -122,6 +217,36 @@ export async function POST(request: Request) {
         console.error("Failed to generate embedding for prompt:", prompt.id, err)
       );
     }
+
+    // Run quality check for auto-delist (non-blocking for public prompts)
+    // This runs in the background and will delist the prompt if quality issues are found
+    if (!isPrivate) {
+      console.log(`[Quality Check] Starting check for prompt ${prompt.id}`);
+      checkPromptQuality(title, content, description).then(async (result) => {
+        console.log(`[Quality Check] Result for prompt ${prompt.id}:`, JSON.stringify(result));
+        if (result.shouldDelist && result.reason) {
+          console.log(`[Quality Check] Auto-delisting prompt ${prompt.id}: ${result.reason} - ${result.details}`);
+          await db.prompt.update({
+            where: { id: prompt.id },
+            data: {
+              isUnlisted: true,
+              unlistedAt: new Date(),
+              delistReason: result.reason,
+            },
+          });
+          console.log(`[Quality Check] Prompt ${prompt.id} delisted successfully`);
+          // Revalidate cache after auto-delist
+          revalidatePrompts();
+        }
+      }).catch((err) => {
+        console.error("[Quality Check] Failed to run quality check for prompt:", prompt.id, err);
+      });
+    } else {
+      console.log(`[Quality Check] Skipped - prompt ${prompt.id} is private`);
+    }
+
+    // Revalidate prompts cache
+    revalidatePrompts();
 
     return NextResponse.json(prompt);
   } catch (error) {
@@ -199,10 +324,10 @@ export async function GET(request: Request) {
             },
           },
           category: {
-            select: {
-              id: true,
-              name: true,
-              slug: true,
+            include: {
+              parent: {
+                select: { id: true, name: true, slug: true },
+              },
             },
           },
           tags: {

@@ -46,6 +46,31 @@
     "register": "Inscription",
     "logout": "Déconnexion"
   },
+  "brand": {
+    "copyLogoSvg": "Copier le logo SVG",
+    "brandAssets": "Ressources de marque",
+    "title": "Ressources de marque",
+    "description": "Logos officiels, couleurs et directives de marque pour {name}. Gratuit pour la presse, les partenariats et les projets communautaires.",
+    "logos": "Logos",
+    "logo": "Logo",
+    "logoWithName": "Logo avec nom",
+    "forLightBackgrounds": "Pour fonds clairs",
+    "forDarkBackgrounds": "Pour fonds sombres",
+    "brandColors": "Couleurs de marque",
+    "clickToCopy": "Cliquez pour copier la valeur hex",
+    "primary": "Couleur de marque principale",
+    "background": "Fond clair",
+    "accent": "Couleur d'accentuation indigo",
+    "muted": "Couleur de texte atténuée",
+    "usageGuidelines": "Directives d'utilisation",
+    "guideline1": "Ne pas étirer, déformer ou faire pivoter le logo",
+    "guideline2": "Maintenir un espacement adéquat autour du logo",
+    "guideline3": "Utiliser le logo sombre sur les fonds clairs et vice versa",
+    "guideline4": "Ne pas ajouter d'effets comme des ombres ou des dégradés au logo",
+    "guideline5": "Le logo doit être clairement visible sur le fond",
+    "license": "Licence",
+    "licenseText": "Les ressources de marque {name} sont fournies sous <link>CC0 1.0 Universal</link>. Vous êtes libre d'utiliser ces ressources à toutes fins sans attribution."
+  },
   "auth": {
     "login": "Connexion",
     "loginDescription": "Entrez vos identifiants pour continuer",
@@ -76,6 +101,7 @@
   "prompts": {
     "title": "Prompts",
     "create": "Créer un Prompt",
+    "createInfo": "Cette plateforme n'exécute pas les prompts — c'est une bibliothèque communautaire pour partager et découvrir des prompts IA. Créez votre prompt ici, et d'autres pourront le copier et l'utiliser dans leurs outils IA préférés comme ChatGPT, Claude, Gemini ou tout autre LLM. La communauté peut également commenter vos prompts et suggérer des améliorations via des demandes de modification.",
     "hfDataStudio": {
       "button": "HF Data Studio",
       "sqlQuery": "Requête SQL",
@@ -95,6 +121,7 @@
     "noPrompts": "Aucun prompt trouvé",
     "noPromptsDescription": "Essayez d'ajuster votre recherche ou vos critères de filtre pour trouver ce que vous cherchez.",
     "noMorePrompts": "Vous avez atteint la fin",
+    "loadMore": "Charger plus",
     "loading": "Chargement...",
     "promptTitle": "Titre",
     "promptContent": "Contenu",
@@ -115,6 +142,18 @@
     "unlist": "Retirer",
     "relist": "Remettre",
     "adminArea": "Zone Admin",
+    "promptDelisted": "Ce prompt a été retiré de la liste",
+    "delistReasonTooShort": "Ce prompt a été retiré automatiquement car le contenu est trop court. Il apparaîtra toujours sur votre profil, mais ne sera pas exporté vers GitHub et n'apparaîtra pas dans les recherches.",
+    "delistReasonNotEnglish": "Ce prompt a été retiré automatiquement car il n'est pas principalement en anglais. Il apparaîtra toujours sur votre profil, mais ne sera pas exporté vers GitHub et n'apparaîtra pas dans les recherches.",
+    "delistReasonLowQuality": "Ce prompt a été retiré automatiquement en raison de problèmes de qualité. Il apparaîtra toujours sur votre profil, mais ne sera pas exporté vers GitHub et n'apparaîtra pas dans les recherches.",
+    "delistReasonNotInstruction": "Ce prompt a été retiré automatiquement car il ne semble pas être une instruction pour LLM. Il apparaîtra toujours sur votre profil, mais ne sera pas exporté vers GitHub et n'apparaîtra pas dans les recherches.",
+    "delistReasonManual": "Ce prompt a été retiré manuellement par un administrateur. Il apparaîtra toujours sur votre profil, mais ne sera pas exporté vers GitHub et n'apparaîtra pas dans les recherches.",
+    "delistReasonUnknown": "Ce prompt a été retiré de la liste. Il apparaîtra toujours sur votre profil, mais ne sera pas exporté vers GitHub et n'apparaîtra pas dans les recherches.",
+    "delistOwnerNote": "Comme ce prompt a été retiré pour des problèmes de qualité, vous pouvez le supprimer si vous le souhaitez.",
+    "deletePrompt": "Supprimer le Prompt",
+    "deletePromptTitle": "Supprimer ce prompt ?",
+    "deletePromptDescription": "Cette action est irréversible. Le prompt sera définitivement supprimé.",
+    "deleteError": "Échec de la suppression du prompt",
     "types": {
       "text": "Texte",
       "image": "Image",
@@ -125,8 +164,9 @@
     },
     "inputType": "Prompt Utilisateur",
     "outputType": "Réponse IA",
+    "afterAiProcessing": "Après traitement IA...",
     "inputTypeDescription": "Comment votre prompt est formaté",
-    "outputTypeDescription": "Type de réponse que l'IA générera",
+    "outputTypeDescription": "Montrez à la communauté comment ce prompt fonctionne lorsqu'il est exécuté sur des outils IA. Vous pouvez générer les résultats vous-même en utilisant votre application IA préférée.",
     "outputTypeStructuredNote": "Les prompts structurés peuvent produire divers types de sortie",
     "inputTypes": {
       "text": "Prompt Texte",
@@ -171,7 +211,18 @@
     "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce prompt ?",
     "promptCreated": "Prompt créé",
     "promptUpdated": "Prompt mis à jour",
+    "rateLimitError": "Veuillez attendre 30 secondes avant de créer un autre prompt",
+    "duplicatePromptError": "Vous avez déjà un prompt avec le même titre ou contenu",
+    "contentExistsError": "Un prompt avec ce contenu existe déjà : \"{title}\" par {author}",
     "run": "Exécuter",
+    "downloadMarkdown": "Télécharger MD",
+    "downloadYaml": "Télécharger YAML",
+    "copyMarkdownUrl": "Copier le lien MD",
+    "copyYamlUrl": "Copier le lien YAML",
+    "downloadStarted": "Téléchargement démarré",
+    "downloadFailed": "Échec du téléchargement",
+    "urlCopied": "Lien copié",
+    "failedToCopyUrl": "Échec de la copie du lien",
     "promptCopied": "Prompt copié",
     "promptCopiedDescription": "Le prompt a été copié dans le presse-papiers. Collez-le dans {platform} après l'ouverture.",
     "openPlatform": "Ouvrir {platform}",
@@ -226,7 +277,12 @@
     "supportedFormat": "Format supporté",
     "or": "ou",
     "detectedVariables": "Variables",
-    "clickToEdit": "Cliquez pour modifier"
+    "clickToEdit": "Cliquez pour modifier",
+    "translateToLanguage": "Traduire dans votre langue",
+    "translated": "Contenu traduit",
+    "translationFailed": "Échec de la traduction",
+    "alreadyTranslated": "Déjà traduit",
+    "learnHowToWritePrompts": "Apprenez à écrire des prompts efficaces →"
   },
   "changeRequests": {
     "title": "Demandes de Modification",
@@ -376,7 +432,35 @@
       "regenerateEmbeddings": "Régénérer tous les embeddings",
       "pending": "en attente",
       "embeddingsSuccess": "{count} embeddings générés",
-      "embeddingsResult": "Générés : {success}, Échecs : {failed}"
+      "embeddingsResult": "Générés : {success}, Échecs : {failed}",
+      "slugsTitle": "Slugs d'URL",
+      "generateSlugs": "Générer les slugs",
+      "regenerateSlugs": "Régénérer tous les slugs (traduit les titres en anglais)",
+      "slugsSuccess": "{count} slugs générés",
+      "slugsResult": "Générés : {success}, Échecs : {failed}"
+    },
+    "promptsList": {
+      "title": "Tous les Prompts",
+      "description": "Parcourir et gérer tous les prompts du système",
+      "noPrompts": "Aucun prompt trouvé",
+      "private": "Privé",
+      "unlisted": "Non listé",
+      "views": "vues",
+      "votes": "votes",
+      "created": "Créé",
+      "showing": "Affichage {from}-{to} sur {total}",
+      "deleteConfirmTitle": "Supprimer le Prompt ?",
+      "deleteConfirmDescription": "Êtes-vous sûr de vouloir supprimer définitivement \"{title}\" ? Cette action est irréversible.",
+      "deleted": "Prompt supprimé avec succès",
+      "filters": {
+        "all": "Tous",
+        "public": "Publics",
+        "private": "Privés",
+        "unlisted": "Non listés",
+        "featured": "En vedette",
+        "reported": "Signalés",
+        "deleted": "Supprimés"
+      }
     },
     "users": {
       "title": "Gestion des Utilisateurs",
@@ -400,7 +484,17 @@
       "unverified": "Vérification retirée",
       "verifyFailed": "Échec de la mise à jour de la vérification",
       "deleteConfirmTitle": "Supprimer l'Utilisateur ?",
-      "deleteConfirmDescription": "Cette action ne peut pas être annulée. Toutes les données de l'utilisateur seront définitivement supprimées."
+      "deleteConfirmDescription": "Cette action ne peut pas être annulée. Toutes les données de l'utilisateur seront définitivement supprimées.",
+      "searchPlaceholder": "Rechercher des utilisateurs...",
+      "noUsers": "Aucun utilisateur trouvé",
+      "showing": "Affichage {from}-{to} sur {total}",
+      "filters": {
+        "all": "Tous",
+        "admin": "Admins",
+        "user": "Utilisateurs",
+        "verified": "Vérifiés",
+        "unverified": "Non vérifiés"
+      }
     },
     "categories": {
       "title": "Gestion des Catégories",
@@ -559,7 +653,8 @@
     "contributionsCount": "contributions",
     "noContributions": "Aucune contribution pour l'instant",
     "noContributionsOwner": "Vous n'avez pas encore contribué à des prompts",
-    "contributedTo": "A contribué au prompt de {author}"
+    "contributedTo": "A contribué au prompt de {author}",
+    "privatePromptsNote": "Vous avez {count} {count, plural, one {prompt privé} other {prompts privés}}. Accédez-y via MCP en utilisant votre clé API dans les clients pris en charge."
   },
   "subscription": {
     "subscribe": "S'abonner",
@@ -640,11 +735,15 @@
     "latestPrompts": "Derniers Prompts",
     "achievements": {
       "featuredIn": "Mentionné dans",
+      "referencedBy": "Référencé par",
       "forbes": "Forbes",
+      "harvardUniversity": "Université Harvard",
       "mostLikedDataset": "#1 Dataset le Plus Aimé sur Hugging Face",
       "githubStars": "Étoiles GitHub",
       "mostStarredRepo": "#33 Repo le Plus Étoilé au Monde",
       "usedByThousands": "Utilisé par des Milliers Chaque Jour",
+      "githubStaffPick": "Sélection de l'Équipe GitHub",
+      "fullyOpenSource": "La seule bibliothèque de prompts 100% gratuite & open source",
       "sponsoredBy": "Sponsorisé par",
       "becomeSponsor": "Devenir Sponsor"
     }
@@ -652,7 +751,36 @@
   "notifications": {
     "title": "Notifications",
     "pendingChangeRequests": "Demandes de modification en attente",
-    "noNotifications": "Aucune notification"
+    "noNotifications": "Aucune notification",
+    "markAllRead": "Tout marquer comme lu",
+    "commentedOnPrompt": "a commenté votre prompt",
+    "repliedToComment": "a répondu à votre commentaire"
+  },
+  "comments": {
+    "comments": "Commentaires",
+    "writeComment": "Écrire un commentaire...",
+    "postComment": "Publier",
+    "reply": "Répondre",
+    "replyTo": "Répondre à @{username}...",
+    "posting": "Publication...",
+    "commentPosted": "Commentaire publié",
+    "commentDeleted": "Commentaire supprimé",
+    "commentFlagged": "Commentaire signalé",
+    "commentUnflagged": "Signalement retiré",
+    "noComments": "Aucun commentaire. Soyez le premier !",
+    "loginToComment": "Connectez-vous pour commenter.",
+    "loginToVote": "Connectez-vous pour voter.",
+    "upvote": "Vote positif",
+    "downvote": "Vote négatif",
+    "flag": "Signaler",
+    "unflag": "Retirer le signalement",
+    "flagged": "Signalé",
+    "admin": "Admin",
+    "deleteCommentTitle": "Supprimer le commentaire ?",
+    "deleteCommentDescription": "Cette action est irréversible. Le commentaire et toutes ses réponses seront définitivement supprimés.",
+    "deleting": "Suppression...",
+    "showReplies": "Afficher {count} réponses",
+    "hideReplies": "Masquer les réponses"
   },
   "promptmasters": {
     "title": "Promptmasters",
@@ -756,6 +884,112 @@
     "categories": "Catégories",
     "categoryPlaceholder": "Ajouter un slug de catégorie...",
     "tags": "Tags",
-    "tagPlaceholder": "Ajouter un slug de tag..."
+    "tagPlaceholder": "Ajouter un slug de tag...",
+    "generateApiKey": "Générez une clé API pour enregistrer des prompts via MCP"
+  },
+  "footer": {
+    "howTo": "Comment faire",
+    "docs": "Documentation",
+    "api": "API",
+    "privacy": "Confidentialité",
+    "terms": "Conditions"
+  },
+  "apiKey": {
+    "title": "Clé API MCP",
+    "description": "Générez une clé API pour enregistrer des prompts via MCP et accéder à vos prompts privés.",
+    "yourApiKey": "Votre Clé API",
+    "keyWarning": "Gardez cette clé secrète. Toute personne possédant cette clé peut accéder à vos prompts privés et créer des prompts en votre nom.",
+    "noApiKey": "Vous n'avez pas encore généré de clé API.",
+    "generate": "Générer une Clé API",
+    "regenerate": "Régénérer",
+    "revoke": "Révoquer",
+    "regenerateTitle": "Régénérer la Clé API ?",
+    "regenerateDescription": "Cela invalidera votre clé API actuelle. Les clients MCP utilisant l'ancienne clé devront être mis à jour.",
+    "revokeTitle": "Révoquer la Clé API ?",
+    "revokeDescription": "Cela supprimera définitivement votre clé API. Vous ne pourrez pas utiliser les fonctionnalités MCP nécessitant une authentification jusqu'à ce que vous génériez une nouvelle clé.",
+    "keyGenerated": "Clé API générée avec succès",
+    "keyRegenerated": "Clé API régénérée avec succès",
+    "keyRevoked": "Clé API révoquée",
+    "publicByDefault": "Prompts publics par défaut",
+    "publicByDefaultDescription": "Lors de l'enregistrement de prompts via MCP, les rendre publics par défaut au lieu de privés.",
+    "settingUpdated": "Paramètre mis à jour"
+  },
+  "promptWritingGuide": {
+    "title": "Comment Écrire de Bons Prompts",
+    "subtitle": "Conseils, exemples et meilleures pratiques pour créer des prompts IA efficaces",
+    "generalTips": {
+      "title": "Conseils Généraux pour des Prompts Efficaces",
+      "beSpecific": {
+        "title": "Soyez Spécifique et Clair",
+        "description": "Les prompts vagues mènent à des réponses vagues. Spécifiez exactement ce que vous voulez, incluant le format, la longueur, le ton et toutes les contraintes."
+      },
+      "provideContext": {
+        "title": "Fournissez du Contexte",
+        "description": "Donnez des informations de fond qui aident l'IA à comprendre vos besoins. Incluez qui, quoi, pourquoi et pour qui."
+      },
+      "defineFormat": {
+        "title": "Définissez le Format de Sortie",
+        "description": "Spécifiez comment vous voulez que la réponse soit structurée : points de liste, paragraphes, blocs de code, tableaux, etc."
+      },
+      "setConstraints": {
+        "title": "Définissez des Contraintes",
+        "description": "Incluez des limitations comme le nombre de mots, le niveau de lecture, les choses à éviter ou les exigences spécifiques à suivre."
+      },
+      "includeExamples": {
+        "title": "Incluez des Exemples",
+        "description": "Montrez à l'IA à quoi ressemble une bonne sortie. Les exemples aident à calibrer le style et la qualité de la réponse."
+      }
+    },
+    "rolePlaying": {
+      "title": "Jeu de Rôle : Modèles \"Agis Comme\"",
+      "description": "L'une des techniques de prompting les plus puissantes est d'assigner à l'IA un rôle ou une personnalité spécifique. Cela aide à établir l'expertise, le ton et la perspective.",
+      "basicPattern": "Modèle de Rôle de Base",
+      "exampleExpert": "Exemple : Expert Technique",
+      "exampleCreative": "Exemple : Coach Créatif",
+      "popularRoles": "Catégories de Rôles Populaires"
+    },
+    "variables": {
+      "title": "Utiliser des Variables pour des Prompts Dynamiques",
+      "description": "Les variables rendent vos prompts réutilisables et personnalisables. Les utilisateurs peuvent remplir différentes valeurs à chaque utilisation de votre prompt.",
+      "syntax": "Syntaxe des Variables",
+      "requiredVar": "Variable requise (l'utilisateur doit remplir)",
+      "withDefault": "Variable avec valeur par défaut",
+      "simpleExample": "Exemple Simple",
+      "advancedExample": "Exemple Avancé avec Plusieurs Variables",
+      "bestPractices": "Meilleures Pratiques",
+      "tip1": "Utilisez des noms de variables descriptifs : '$'{sujet} est mieux que '$'{x}",
+      "tip2": "Fournissez des valeurs par défaut sensées pour les valeurs optionnelles",
+      "tip3": "Regroupez les variables liées ensemble dans votre prompt",
+      "tip4": "Utilisez des underscores pour les noms à plusieurs mots : '$'{public_cible}"
+    },
+    "structured": {
+      "title": "Prompts Structurés (JSON/YAML)",
+      "description": "Les prompts structurés utilisent le format JSON ou YAML pour organiser clairement des instructions complexes. Ils sont idéaux pour les workflows multi-étapes, les agents et les configurations détaillées.",
+      "whenToUse": "Quand Utiliser des Prompts Structurés",
+      "useCase1": "Workflows ou pipelines complexes multi-étapes",
+      "useCase2": "Configurations d'agents avec plusieurs paramètres",
+      "useCase3": "Prompts avec de nombreux paramètres interconnectés",
+      "useCase4": "Utilisation de prompts programmatique ou basée sur API",
+      "jsonExample": "Exemple JSON : Assistant d'Entretien",
+      "yamlExample": "Exemple YAML : Générateur de Contenu",
+      "agentWorkflow": "Exemple JSON : Workflow d'Agent",
+      "tips": "Conseils pour les Prompts Structurés",
+      "tip1": "Utilisez JSON pour l'usage programmatique ; YAML pour les configs lisibles",
+      "tip2": "Gardez l'imbrication peu profonde (max 2-3 niveaux) pour la lisibilité",
+      "tip3": "Incluez des commentaires en YAML pour expliquer les sections complexes",
+      "tip4": "Validez votre syntaxe JSON/YAML avant d'enregistrer"
+    },
+    "outputOptimization": {
+      "title": "Optimisation de la Sortie",
+      "description": "Guidez l'IA pour produire exactement le format et le style dont vous avez besoin en étant explicite sur vos exigences.",
+      "formatInstructions": "Modèle d'Instructions de Format",
+      "constraintExamples": "Types de Contraintes Courants",
+      "lengthConstraints": "Contraintes de longueur :",
+      "lengthExample": "\"Gardez la réponse sous 200 mots\" / \"Fournissez exactement 5 points\"",
+      "styleConstraints": "Contraintes de style :",
+      "styleExample": "\"Utilisez un langage simple adapté aux débutants\" / \"Soyez technique et précis\"",
+      "contentConstraints": "Contraintes de contenu :",
+      "contentExample": "\"N'incluez pas d'opinions personnelles\" / \"Concentrez-vous uniquement sur les informations factuelles\""
+    }
   }
 }

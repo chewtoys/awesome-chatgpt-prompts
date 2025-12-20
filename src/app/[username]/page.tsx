@@ -3,9 +3,11 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getTranslations, getLocale } from "next-intl/server";
 import { formatDistanceToNow } from "@/lib/date";
-import { Calendar, ArrowBigUp, FileText, Settings, GitPullRequest, Clock, Check, X, Pin, BadgeCheck, Users } from "lucide-react";
+import { getPromptUrl } from "@/lib/urls";
+import { Calendar, ArrowBigUp, FileText, Settings, GitPullRequest, Clock, Check, X, Pin, BadgeCheck, Users, ShieldCheck } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import config from "@/../prompts.config";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,6 +16,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { PromptList } from "@/components/prompts/prompt-list";
 import { PromptCard, type PromptCardProps } from "@/components/prompts/prompt-card";
 import { McpServerPopup } from "@/components/mcp/mcp-server-popup";
+import { PrivatePromptsNote } from "@/components/prompts/private-prompts-note";
 
 interface UserProfilePageProps {
   params: Promise<{ username: string }>;
@@ -112,10 +115,10 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
       },
     },
     category: {
-      select: {
-        id: true,
-        name: true,
-        slug: true,
+      include: {
+        parent: {
+          select: { id: true, name: true, slug: true },
+        },
       },
     },
     tags: {
@@ -129,7 +132,7 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
   };
 
   // Fetch prompts, pinned prompts, contributions, and counts
-  const [promptsRaw, total, totalUpvotes, pinnedPromptsRaw, contributionsRaw] = await Promise.all([
+  const [promptsRaw, total, totalUpvotes, pinnedPromptsRaw, contributionsRaw, privatePromptsCount] = await Promise.all([
     db.prompt.findMany({
       where,
       orderBy: { createdAt: "desc" },
@@ -155,6 +158,7 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
       },
     }),
     // Fetch contributions (prompts where user is contributor but not author)
+    // Limited to 50 to prevent memory issues
     db.prompt.findMany({
       where: {
         contributors: {
@@ -162,10 +166,20 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
         },
         authorId: { not: user.id },
         isPrivate: false,
+        deletedAt: null,
       },
       orderBy: { updatedAt: "desc" },
+      take: 50,
       include: promptInclude,
     }),
+    // Count private prompts (only relevant for owner)
+    isOwner ? db.prompt.count({
+      where: {
+        authorId: user.id,
+        isPrivate: true,
+        deletedAt: null,
+      },
+    }) : Promise.resolve(0),
   ]);
 
   // Transform to include voteCount and contributorCount
@@ -199,6 +213,7 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
   // Fetch change requests for this user
   // 1. Change requests the user submitted (all statuses for owner, approved only for others)
   // 2. Change requests received on user's prompts (approved ones)
+  // Limited to 100 each to prevent memory issues
   const [submittedChangeRequests, receivedChangeRequests] = await Promise.all([
     // CRs user submitted
     db.changeRequest.findMany({
@@ -208,6 +223,7 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
         ...(isOwner ? {} : { status: "APPROVED" }),
       },
       orderBy: { createdAt: "desc" },
+      take: 100,
       include: {
         author: {
           select: {
@@ -220,6 +236,7 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
         prompt: {
           select: {
             id: true,
+            slug: true,
             title: true,
             author: {
               select: {
@@ -242,6 +259,7 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
         authorId: { not: user.id }, // Exclude self-submitted
       },
       orderBy: { createdAt: "desc" },
+      take: 100,
       include: {
         author: {
           select: {
@@ -254,6 +272,7 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
         prompt: {
           select: {
             id: true,
+            slug: true,
             title: true,
             author: {
               select: {
@@ -309,7 +328,7 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
                 <BadgeCheck className="h-5 w-5 text-blue-500 shrink-0" />
               )}
               {user.role === "ADMIN" && (
-                <Badge variant="default" className="text-xs shrink-0">Admin</Badge>
+                <ShieldCheck className="h-5 w-5 text-primary shrink-0" />
               )}
             </div>
             <p className="text-muted-foreground text-sm flex items-center gap-2 flex-wrap">
@@ -323,7 +342,7 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
           </div>
           {/* Actions - desktop only */}
           <div className="hidden md:flex items-center gap-2 shrink-0">
-            <McpServerPopup initialUsers={[user.username]} />
+            {config.features.mcp !== false && <McpServerPopup initialUsers={[user.username]} showOfficialBranding={!config.homepage?.useCloneBranding} />}
             {isOwner && (
               <Button variant="outline" size="sm" asChild>
                 <Link href="/settings">
@@ -360,7 +379,7 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
 
         {/* Actions - mobile only */}
         <div className="md:hidden flex gap-2">
-          <McpServerPopup initialUsers={[user.username]} />
+          {config.features.mcp !== false && <McpServerPopup initialUsers={[user.username]} showOfficialBranding={!config.homepage?.useCloneBranding} />}
           {isOwner && (
             <Button variant="outline" size="sm" asChild className="flex-1">
               <Link href="/settings">
@@ -400,6 +419,9 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
         </TabsList>
 
         <TabsContent value="prompts">
+          {/* Private Prompts MCP Note - only shown to owner with private prompts */}
+          {isOwner && <PrivatePromptsNote count={privatePromptsCount} />}
+
           {/* Pinned Prompts Section */}
           {pinnedPrompts.length > 0 && (
             <div className="mb-6 pb-6 border-b">
@@ -468,7 +490,7 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
                 return (
                   <Link 
                     key={cr.id} 
-                    href={`/prompts/${cr.prompt.id}/changes/${cr.id}`}
+                    href={`${getPromptUrl(cr.prompt.id, cr.prompt.slug)}/changes/${cr.id}`}
                     className="flex items-center justify-between px-3 py-2 hover:bg-accent/50 transition-colors"
                   >
                     <div className="min-w-0 flex-1">

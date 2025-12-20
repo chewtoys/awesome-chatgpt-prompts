@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { Server, Database, Key, Palette, Globe, Settings, HardDrive, Cpu } from "lucide-react";
+import Image from "next/image";
+import { Server, Database, Key, Palette, Globe, Settings, HardDrive, Cpu, BookOpen } from "lucide-react";
+import DeepWikiIcon from "@/../public/deepwiki.svg";
+import Context7Icon from "@/../public/context7.svg";
 import {
   Table,
   TableBody,
@@ -39,22 +42,83 @@ export default function SelfHostingPage() {
           </ul>
         </section>
 
-        {/* Prerequisites */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold flex items-center gap-2">
-            <Database className="h-5 w-5" />
-            Prerequisites
-          </h2>
-          <ul className="list-disc list-inside text-muted-foreground space-y-1">
-            <li>Node.js 18+</li>
-            <li>PostgreSQL database</li>
-            <li>npm or yarn</li>
-          </ul>
+        {/* Using Documentation AI-Agents */}
+        <section className="space-y-6">
+          <h2 className="text-xl font-bold">Using Documentation AI-Agents</h2>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* DeepWiki */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <Image src={DeepWikiIcon} alt="" width={20} height={20} />
+                DeepWiki
+              </h3>
+              <p className="text-muted-foreground">
+                <Link 
+                  href="https://deepwiki.com/f/awesome-chatgpt-prompts" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="underline hover:text-foreground"
+                >
+                  DeepWiki
+                </Link>
+                {" "}provides AI-powered documentation and insights for this repository.
+              </p>
+              <ul className="list-disc list-inside text-muted-foreground space-y-1 text-sm">
+                <li>AI-generated documentation from source code</li>
+                <li>Interactive codebase exploration</li>
+                <li>Architecture diagrams and component relationships</li>
+                <li>Available as an MCP server</li>
+              </ul>
+            </div>
+
+            {/* Context7 */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <Image src={Context7Icon} alt="" width={20} height={20} className="rounded" />
+                Context7
+              </h3>
+              <p className="text-muted-foreground">
+                <Link 
+                  href="https://context7.com/f/awesome-chatgpt-prompts?tab=chat" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="underline hover:text-foreground"
+                >
+                  Context7
+                </Link>
+                {" "}is an AI-powered chat interface for exploring and understanding this repository.
+              </p>
+              <ul className="list-disc list-inside text-muted-foreground space-y-1 text-sm">
+                <li>Chat with the codebase using natural language</li>
+                <li>Get answers with code references</li>
+                <li>Understand implementation details quickly</li>
+                <li>Available as an MCP server</li>
+              </ul>
+            </div>
+          </div>
         </section>
 
-        {/* Installation */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Quick Start</h2>
+        {/* Manually */}
+        <section className="space-y-6">
+          <h2 className="text-xl font-bold">Manually</h2>
+
+          {/* Prerequisites */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              <Database className="h-5 w-5" />
+              Prerequisites
+            </h3>
+            <ul className="list-disc list-inside text-muted-foreground space-y-1">
+              <li>Node.js 18+</li>
+              <li>PostgreSQL database</li>
+              <li>npm or yarn</li>
+            </ul>
+          </div>
+
+          {/* Installation */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Quick Start</h3>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm space-y-1 overflow-x-auto">
             <p className="text-muted-foreground"># Clone the repository</p>
             <p>git clone https://github.com/f/awesome-chatgpt-prompts.git</p>
@@ -69,14 +133,14 @@ export default function SelfHostingPage() {
             <p className="text-muted-foreground mt-3"># Start development server</p>
             <p>npm run dev</p>
           </div>
-        </section>
+          </div>
 
-        {/* Environment Variables */}
-        <section className="space-y-6">
-          <h2 className="text-lg font-semibold flex items-center gap-2">
-            <Key className="h-5 w-5" />
-            Environment Variables
-          </h2>
+          {/* Environment Variables */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              <Key className="h-5 w-5" />
+              Environment Variables
+            </h3>
           <p className="text-muted-foreground">
             Create a <code className="bg-muted px-1.5 py-0.5 rounded text-sm">.env</code> file based on <code className="bg-muted px-1.5 py-0.5 rounded text-sm">.env.example</code>:
           </p>
@@ -253,14 +317,14 @@ export default function SelfHostingPage() {
               </Table>
             </div>
           </div>
-        </section>
+          </div>
 
-        {/* Configuration */}
-        <section className="space-y-6">
-          <h2 className="text-lg font-semibold flex items-center gap-2">
-            <Palette className="h-5 w-5" />
-            Configuration (prompts.config.ts)
-          </h2>
+          {/* Configuration */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              <Palette className="h-5 w-5" />
+              Configuration (prompts.config.ts)
+            </h3>
           <p className="text-muted-foreground">
             Customize your instance by editing <code className="bg-muted px-1.5 py-0.5 rounded text-sm">prompts.config.ts</code>:
           </p>
@@ -481,14 +545,14 @@ export default function SelfHostingPage() {
               </Table>
             </div>
           </div>
-        </section>
+          </div>
 
-        {/* White-label */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold flex items-center gap-2">
-            <Settings className="h-5 w-5" />
-            White-Label Mode
-          </h2>
+          {/* White-label */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              White-Label Mode
+            </h3>
           <p className="text-muted-foreground">
             Set <code className="bg-muted px-1.5 py-0.5 rounded text-sm">useCloneBranding = true</code> at the top of the config to:
           </p>
@@ -503,14 +567,14 @@ export default function SelfHostingPage() {
             <p className="text-muted-foreground">// prompts.config.ts</p>
             <p>const useCloneBranding = true;</p>
           </div>
-        </section>
+          </div>
 
-        {/* Production */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold flex items-center gap-2">
-            <Globe className="h-5 w-5" />
-            Production Deployment
-          </h2>
+          {/* Production */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              <Globe className="h-5 w-5" />
+              Production Deployment
+            </h3>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm space-y-1">
             <p>npm run build</p>
             <p>npm run start</p>
@@ -518,11 +582,11 @@ export default function SelfHostingPage() {
           <p className="text-muted-foreground">
             Deploy to Vercel, Railway, Render, or any Node.js hosting platform. Make sure to set all environment variables in your hosting provider&apos;s dashboard.
           </p>
-        </section>
+          </div>
 
-        {/* Support */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Support</h2>
+          {/* Support */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Support</h3>
           <p className="text-muted-foreground">
             For issues and questions, please open a{" "}
             <Link 
@@ -543,7 +607,8 @@ export default function SelfHostingPage() {
               SELF-HOSTING.md
             </Link>
             {" "}file in the repository.
-          </p>
+            </p>
+          </div>
         </section>
       </div>
     </div>

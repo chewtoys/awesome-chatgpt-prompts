@@ -22,13 +22,35 @@ import { FeaturePromptButton } from "@/components/prompts/feature-prompt-button"
 import { UnlistPromptButton } from "@/components/prompts/unlist-prompt-button";
 import { MediaPreview } from "@/components/prompts/media-preview";
 import { ReportPromptDialog } from "@/components/prompts/report-prompt-dialog";
+import { DelistBanner } from "@/components/prompts/delist-banner";
+import { CommentSection } from "@/components/comments";
 
 interface PromptPageProps {
   params: Promise<{ id: string }>;
 }
 
+/**
+ * Extracts the prompt ID from a URL parameter that may contain a slug
+ * Supports formats: "abc123", "abc123_some-slug", or "abc123_some-slug.prompt.md"
+ */
+function extractPromptId(idParam: string): string {
+  let param = idParam;
+  // Strip .prompt.md suffix if present
+  if (param.endsWith(".prompt.md")) {
+    param = param.slice(0, -".prompt.md".length);
+  }
+  // If the param contains an underscore, extract the ID (everything before first underscore)
+  const underscoreIndex = param.indexOf("_");
+  if (underscoreIndex !== -1) {
+    return param.substring(0, underscoreIndex);
+  }
+  return param;
+}
+
+
 export async function generateMetadata({ params }: PromptPageProps): Promise<Metadata> {
-  const { id } = await params;
+  const { id: idParam } = await params;
+  const id = extractPromptId(idParam);
   const prompt = await db.prompt.findUnique({
     where: { id },
     select: { title: true, description: true },
@@ -45,7 +67,8 @@ export async function generateMetadata({ params }: PromptPageProps): Promise<Met
 }
 
 export default async function PromptPage({ params }: PromptPageProps) {
-  const { id } = await params;
+  const { id: idParam } = await params;
+  const id = extractPromptId(idParam);
   const session = await auth();
   const t = await getTranslations("prompts");
   const locale = await getLocale();
@@ -61,7 +84,11 @@ export default async function PromptPage({ params }: PromptPageProps) {
           avatar: true,
         },
       },
-      category: true,
+      category: {
+        include: {
+          parent: true,
+        },
+      },
       tags: {
         include: {
           tag: true,
@@ -160,8 +187,21 @@ export default async function PromptPage({ params }: PromptPageProps) {
     REJECTED: X,
   };
 
+  // Get delist reason (cast to expected type after Prisma migration)
+  const delistReason = (prompt as { delistReason?: string | null }).delistReason as
+    | "TOO_SHORT" | "NOT_ENGLISH" | "LOW_QUALITY" | "NOT_LLM_INSTRUCTION" | "MANUAL" | null;
+
   return (
     <div className="container max-w-4xl py-8">
+      {/* Delist Banner - shown to owner and admins when prompt is delisted */}
+      {prompt.isUnlisted && delistReason && (isOwner || isAdmin) && (
+        <DelistBanner
+          promptId={prompt.id}
+          delistReason={delistReason}
+          isOwner={isOwner}
+        />
+      )}
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
         <div className="space-y-1 min-w-0">
@@ -382,9 +422,22 @@ export default async function PromptPage({ params }: PromptPageProps) {
                 isStructured={true}
                 structuredFormat={(prompt.structuredFormat?.toLowerCase() as "json" | "yaml") || "json"}
                 title={t("promptContent")}
+                isLoggedIn={!!session?.user}
+                categoryName={prompt.category?.name}
+                parentCategoryName={prompt.category?.parent?.name}
+                promptId={prompt.id}
+                promptSlug={prompt.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}
               />
             ) : (
-              <InteractivePromptContent content={prompt.content} title={t("promptContent")} />
+              <InteractivePromptContent 
+                content={prompt.content} 
+                title={t("promptContent")} 
+                isLoggedIn={!!session?.user}
+                categoryName={prompt.category?.name}
+                parentCategoryName={prompt.category?.parent?.name}
+                promptId={prompt.id}
+                promptSlug={prompt.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}
+              />
             )}
           </div>
           {/* Report link */}
@@ -539,6 +592,17 @@ export default async function PromptPage({ params }: PromptPageProps) {
           </TabsContent>
         )}
       </Tabs>
+
+      {/* Comments Section */}
+      {!prompt.isPrivate && (
+        <CommentSection
+          promptId={prompt.id}
+          currentUserId={session?.user?.id}
+          isAdmin={isAdmin}
+          isLoggedIn={!!session?.user}
+          locale={locale}
+        />
+      )}
 
       {/* Admin Area */}
       {isAdmin && (
