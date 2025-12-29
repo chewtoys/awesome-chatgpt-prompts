@@ -13747,7 +13747,9 @@ Rainy Umbrella Street (full-body),"{
       ""fabric"": ""Leather-like or matte textile with realistic texture""
     },
     ""accessories"": {
-      ""jewelry"": [""Small silver hoops""]
+      ""jewelry"": [
+        ""Small silver hoops""
+      ]
     }
   },
   ""pose"": {
@@ -13800,11 +13802,16 @@ Rainy Umbrella Street (full-body),"{
     ""no_watermarks"": true
   },
   ""negative_prompt"": [
-    ""readable neon signs"", ""logo"", ""watermark"",
-    ""plastic skin"", ""cgi look"",
-    ""extra fingers"", ""warped face"", ""duplicate subject""
+    ""readable neon signs"",
+    ""logo"",
+    ""watermark"",
+    ""plastic skin"",
+    ""cgi look"",
+    ""extra fingers"",
+    ""warped face"",
+    ""duplicate subject""
   ]
-}",FALSE,TEXT,dorukkurtoglu@gmail.com
+}",FALSE,STRUCTURED,dorukkurtoglu@gmail.com
 "Cozy Couch Lamp (close-up, warm tungsten)","{
   ""category"": ""COZY_COUCH_LAMP_CLOSEUP"",
   ""subject"": {
